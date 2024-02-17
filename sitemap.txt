@@ -1,0 +1,27 @@
+routes
+│
+├── dashboard
+│
+├── user
+│   ├── new
+│   ├── [uid]
+│   │   └── edit
+│   └── admin
+│
+├── course
+│   ├── new
+│   └── [cid]
+│       └── edit
+│
+├── module
+│   ├── new
+│   └── [mid]
+│       └── edit
+│
+└── assignment
+    ├── new
+    └── [aid]
+        ├── edit
+        ├── submit
+        └── grade
+            └── [sid]
