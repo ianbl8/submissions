@@ -1,3 +1,10 @@
+<script lang="ts">
+	import { Auth } from '@supabase/auth-ui-svelte';
+	import { ThemeSupa } from '@supabase/auth-ui-shared';
+
+	export let data;
+</script>
+
 <div class="container h-full mx-auto">
 	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
@@ -9,9 +16,21 @@
 		</h2>
 	</div>
 
+	<!-- Supabase Auth -->
+	<div class="flex flex-col">
+		<div class="py-3 ">
+			<Auth
+				supabaseClient={data.supabase}
+				redirectTo={`${data.url}/auth/callback`}
+				appearance={{ theme: ThemeSupa }}
+				theme="dark"
+				providers={['github']}
+			/>
+		</div>
+	</div>
+
 	<!-- Page content -->
 	<div class="flex flex-col">
-
 		<!-- Section -->
 		<div class="py-3">
 			<h3 class="h3 py-1">Log in by email</h3>
@@ -71,7 +90,5 @@
 				</a>
 			</p>
 		</div>
-
-  </div>
-
+	</div>
 </div>
