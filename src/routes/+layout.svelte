@@ -3,6 +3,35 @@
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 	import { LightSwitch } from '@skeletonlabs/skeleton';
 
+	// Supabase
+	import { goto, invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	export let data;
+
+	let { supabase, session } = data;
+	$: ({ supabase, session } = data);
+
+	onMount(() => {
+		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => data.subscription.unsubscribe();
+	});
+
+	const handleSignOut = async () => {
+		const { error } = await supabase.auth.signOut();
+		if (error) {
+			console.log(error);
+		} else {
+			session = null;
+			goto('/');
+		}
+	};
+
 	// Highlight JS
 	import hljs from 'highlight.js/lib/core';
 	import 'highlight.js/styles/github-dark.css';
@@ -30,7 +59,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<a href="/">	
+				<a href="/">
 					<strong class="text-3xl text-primary-600 dark:text-primary-400 font-bold">
 						Submissions
 					</strong>
@@ -38,15 +67,22 @@
 				<a href="/dashboard" class="text-3xl px-4">Home</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<!-- GitHub repo link - to be replaced -->
-				<a
-					class="btn btn-sm variant-ghost-tertiary"
-					href="https://github.com/ianbl8/submissions"
-					target="_blank"
-				>
-					GitHub repo
-				</a>
 				<LightSwitch />
+				<!-- Sign out button, if logged in -->
+				{#if session}
+					<button class="btn btn-sm variant-ghost-error" on:click={handleSignOut}>
+						Sign out
+					</button>
+				{:else}
+					<!-- GitHub repo link - to be replaced -->
+					<a
+						class="btn btn-sm variant-ghost-tertiary"
+						href="https://github.com/ianbl8/submissions"
+						target="_blank"
+					>
+						GitHub repo
+					</a>
+				{/if}
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
