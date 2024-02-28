@@ -19,6 +19,7 @@
 	let role: string = user?.role ?? '';
 	let status: string = user?.status ?? '';
 	let student_id: string = user?.student_id ?? '';
+	let selected_role: string;
 
 	const handleSubmit: SubmitFunction = () => {
 		loading = true;
@@ -75,25 +76,45 @@
 				</div>
 				<div>
 					<label class="label mt-4" for="role">Role</label>
-					<select class="select" id="role" name="role" value={form?.role ?? role}>
-						{#each roles as r}<option value={r}>{r}</option>{/each}
+					<select class="select" id="role" name="role" bind:value={selected_role}>
+					  {#each roles as r}
+							{#if r == (form?.role ?? role)}
+								<option value={r} selected>{r}</option>
+							{:else if r == 'Student'}
+								<option value={r} selected>{r}</option>
+							{:else}
+						    <option value={r}>{r}</option>
+							{/if}
+					  {/each}
 					</select>
 				</div>
 				<div>
 					<label class="label mt-4" for="status">Status</label>
-					<select class="select" id="status" name="status" value={form?.status ?? status}>
-						{#each statuses as s}<option value={s}>{s}</option>{/each}
+					<select class="select" id="status" name="status">
+					  {#each statuses as s}
+							{#if s == 'Pending'}
+					    	<option value={s} selected>{s}</option>
+							<!--
+							{:else}
+						    <option value={s} disabled>{s}</option>
+							-->
+							{/if}
+					  {/each}
 					</select>
 				</div>
 				<div>
-					<label class="label mt-4" for="student_id">Student ID</label>
-					<input
-						class="input"
-						id="student_id"
-						name="student_id"
-						type="text"
-						value={form?.student_id ?? student_id}
-					/>
+					{#if selected_role == 'Student'}
+						<label class="label mt-4" for="student_id">Student ID</label>
+						<input
+							class="input"
+							id="student_id"
+							name="student_id"
+							type="text"
+							value={form?.student_id ?? student_id}
+						/>
+					{:else}
+						<input class="hidden" id="student_id" name="student_id" type="text" value={form?.student_id ?? student_id} />
+					{/if}
 				</div>
 				<div>
 					<input
