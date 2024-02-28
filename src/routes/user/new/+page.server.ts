@@ -15,7 +15,7 @@ export const load = async ({ locals: { supabase, getSession } }) => {
     .select('id, number, forename, surname, email, role, status, student_id')
     .eq('id', session.user.id)
     .single()
-    
+
   return { session, user }
 }
 
@@ -23,14 +23,17 @@ export const actions = {
   default: async ({ request, locals: { supabase, getSession } }) => {
     const session = await getSession();
 
-    // get form data
+    // get form data, only accept student_id for students
     const formData = await request.formData();
     const forename = formData.get('forename');
     const surname = formData.get('surname');
     const email = formData.get('email');
     const role = formData.get('role');
     const status = formData.get('status');
-    const student_id = formData.get('student_id');
+    let student_id = formData.get('student_id');
+    if (role != 'Student') {
+      student_id = null;
+    }
 
     // upsert data to users table
     const { error } = await supabase.from('users').upsert({
