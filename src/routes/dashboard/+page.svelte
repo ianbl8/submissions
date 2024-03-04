@@ -1,3 +1,14 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import PageTitle from '$lib/components/PageTitle.svelte';
+
+	export let data: PageData;
+
+	let { session, supabase, loggedInUser } = data;
+</script>
+
+<PageTitle title="Dashboard" />
+
 <div class="container h-full mx-auto">
 	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
@@ -11,41 +22,25 @@
 
 	<!-- Page content -->
 	<div class="flex flex-col">
-
 		<!-- Section -->
 		<div class="py-3">
-			<h3 class="h3 py-1">User</h3>
+			<h3 class="h3 py-1">User details</h3>
+			<p class="py-1">{loggedInUser?.forename} {loggedInUser?.surname}, {loggedInUser?.role}</p>
 			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S R
-				</span>
-			</p>
-			<p class="py-1">User details</p>
-			<p class="py-1">
-				Link to view/edit user details:
-				<a
-					href="/user/uid"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/user/[uid]
+				<a href="/user/{loggedInUser?.number}" class="btn btn-sm variant-ghost-tertiary">
+					View your details
 				</a>
 			</p>
-			<!-- Sub section -->
-			<hr />
+			{#if loggedInUser?.role == 'Admin'}
 			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A
-				</span>
-			</p>
-			<p class="py-1">
-				Link to user admin:
 				<a
 					href="/user/admin"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
+					class="btn btn-sm variant-ghost-secondary"
 				>
-					/user/admin
+					User Admin page
 				</a>
 			</p>
+			{/if}
 		</div>
 
 		<!-- Section -->
@@ -105,7 +100,5 @@
 				</a>
 			</p>
 		</div>
-		
 	</div>
-	
 </div>
