@@ -12,12 +12,7 @@
 <div class="container h-full mx-auto">
 	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-bold">Dashboard</h1>
-		<h2 class="text-2xl font-semibold">
-			<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-				/dashboard
-			</span>
-		</h2>
+		<h1 class="text-4xl font-semibold">Dashboard</h1>
 	</div>
 
 	<!-- Page content -->
