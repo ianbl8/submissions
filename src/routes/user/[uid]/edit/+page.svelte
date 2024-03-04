@@ -1,38 +1,131 @@
+<script lang="ts">
+	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import type { PageData, ActionData } from './$types';
+
+	export let data: PageData;
+	export let form: ActionData;
+
+	let { session, supabase, user, loggedInUser } = data;
+	$: ({ session, supabase, user, loggedInUser } = data);
+
+	let newUserForm: HTMLFormElement;
+	let loading = false;
+	let roles = ['Admin', 'Tutor', 'Student', 'Reviewer'];
+	let statuses = ['Pending', 'Active', 'Completed', 'Removed'];
+	let forename: string = user?.forename;
+	let surname: string = user?.surname;
+	let email: string = user?.email;
+	let role: string = user?.role;
+	let status: string = user?.status;
+	let student_id: string = user?.student_id;
+	let selected_role: string;
+
+	const handleSubmit: SubmitFunction = () => {
+		loading = true;
+		return async () => {
+			loading = false;
+		};
+	};
+</script>
+
 <div class="container h-full mx-auto">
 	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-bold">Edit User</h1>
-		<h2 class="text-2xl font-semibold">
-			<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-				/user/[uid]/edit
-			</span>
-		</h2>
+		{#if user.id == loggedInUser?.id}
+			<h1 class="text-4xl font-semibold">Edit your details</h1>
+			<h3 class="h3 py-1 mt-4">Please update your details</h3>
+			{:else}
+			<h1 class="text-4xl font-semibold">Edit details: {user.forename} {user.surname}</h1>
+			<h3 class="h3 py-1 mt-4">Please update their details</h3>
+			{/if}
 	</div>
 
 	<!-- Page content -->
 	<div class="flex flex-col">
-
 		<!-- Section -->
-		<div class="py-3">
-			<h3 class="h3 py-1">Profile</h3>
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S R
-				</span>
-			</p>
-			<p class="py-1">Form to edit user details</p>
-			<p class="py-1">
-				Return to
-				<a
-					href="/user/uid"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/user/[uid]
-				</a>
-				when done
-			</p>
+		<div class="form">
+			<form method="POST" use:enhance={handleSubmit} bind:this={newUserForm}>
+				<div>
+					<label class="label mt-4" for="forename">Forename</label>
+					<input
+						class="input"
+						id="forename"
+						name="forename"
+						type="text"
+						value={form?.forename ?? forename}
+						required
+					/>
+				</div>
+				<div>
+					<label class="label mt-4" for="surname">Surname</label>
+					<input
+						class="input"
+						id="surname"
+						name="surname"
+						type="text"
+						value={form?.surname ?? surname}
+						required
+					/>
+				</div>
+				<div>
+					<label class="label mt-4" for="email">Email</label>
+					<input
+						class="input"
+						id="email"
+						name="email"
+						type="email"
+						value={form?.email ?? email}
+						required
+					/>
+				</div>
+				<div>
+					<label class="label mt-4" for="role">Role</label>
+					<select class="select" id="role" name="role" bind:value={selected_role}>
+					  {#each roles as r}
+							{#if r == (form?.role ?? role)}
+								<option value={r} selected>{r}</option>
+							{:else}
+						    <option value={r}>{r}</option>
+							{/if}
+					  {/each}
+					</select>
+				</div>
+				<div>
+					<label class="label mt-4" for="status">Status</label>
+					<select class="select" id="status" name="status">
+					  {#each statuses as s}
+							{#if s == (form?.status ?? status)}
+					    	<option value={s} selected>{s}</option>
+							{:else}
+						    <option value={s} disabled>{s}</option>
+							{/if}
+					  {/each}
+					</select>
+				</div>
+				<div>
+					{#if selected_role == 'Student'}
+						<label class="label mt-4" for="student_id">Student ID</label>
+						<input
+							class="input"
+							id="student_id"
+							name="student_id"
+							type="text"
+							value={form?.student_id ?? student_id}
+						/>
+					{:else}
+						<input class="hidden" id="student_id" name="student_id" type="text" value={form?.student_id ?? student_id} />
+					{/if}
+				</div>
+				<div>
+					<input
+						type="submit"
+						class="btn btn-md variant-ghost-primary mt-4"
+						value={loading ? 'Loading...' : 'Save'}
+						disabled={loading}
+					/>
+				</div>
+			</form>
 		</div>
-
 	</div>
-	
 </div>
