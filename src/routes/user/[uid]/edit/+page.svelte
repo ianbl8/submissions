@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData, ActionData } from './$types';
+	import PageTitle from '$lib/components/PageTitle.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -28,6 +29,8 @@
 		};
 	};
 </script>
+
+<PageTitle title="Edit: {user.forename} {user.surname}" />
 
 <div class="container h-full mx-auto">
 	<!-- Page name and route -->

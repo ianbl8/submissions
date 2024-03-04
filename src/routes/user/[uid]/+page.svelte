@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import PageTitle from '$lib/components/PageTitle.svelte';
 
 	export let data: PageData;
 
@@ -7,13 +8,15 @@
 	const currentUser: Boolean = user.id == loggedInUser?.id;
 </script>
 
+<PageTitle title="User: {user.forename} {user.surname}" />
+
 <div class="container h-full mx-auto">
 	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
 		{#if user.id == loggedInUser?.id}
-			<h1 class="text-4xl font-bold">Your details</h1>
+			<h1 class="text-4xl font-semibold">Your details</h1>
 		{:else}
-			<h1 class="text-4xl font-bold">Details: {user.forename} {user.surname}</h1>
+			<h1 class="text-4xl font-semibold">Details: {user.forename} {user.surname}</h1>
 		{/if}
 	</div>
 
