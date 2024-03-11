@@ -23,7 +23,6 @@
 <PageTitle title="User Admin" />
 
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
 		<h1 class="text-4xl font-semibold">User Admin</h1>
 	</div>
@@ -31,7 +30,7 @@
 	<!-- Page content -->
 	<div class="flex flex-col">
 
-		<!-- Section -->
+		<!-- User admin datatable -->
 		<div class="py-3">
 			<h3 class="h3 py-1">Users</h3>
 			<header class="flex justify-between gap-4">

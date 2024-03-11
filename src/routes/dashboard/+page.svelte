@@ -10,14 +10,14 @@
 <PageTitle title="Dashboard" />
 
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
 		<h1 class="text-4xl font-semibold">Dashboard</h1>
 	</div>
 
 	<!-- Page content -->
 	<div class="flex flex-col">
-		<!-- Section -->
+
+		<!-- User details -->
 		<div class="py-3">
 			<h3 class="h3 py-1">User details</h3>
 			<p class="py-1">{loggedInUser?.forename} {loggedInUser?.surname}, {loggedInUser?.role}</p>

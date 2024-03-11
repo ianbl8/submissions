@@ -33,7 +33,6 @@
 <PageTitle title="New user" />
 
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
 		<h1 class="text-4xl font-semibold">New User</h1>
 		<h3 class="h3 py-1 mt-4">Please enter your details</h3>
@@ -41,7 +40,8 @@
 
 	<!-- Page content -->
 	<div class="flex flex-col">
-		<!-- Section -->
+
+		<!-- New user form -->
 		<div class="form">
 			<form method="POST" use:enhance={handleSubmit} bind:this={newUserForm}>
 				<div>

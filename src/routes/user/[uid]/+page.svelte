@@ -11,7 +11,6 @@
 <PageTitle title="User: {user.forename} {user.surname}" />
 
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
 		{#if user.id == loggedInUser?.id}
 			<h1 class="text-4xl font-semibold">Your details</h1>
@@ -22,7 +21,8 @@
 
 	<!-- Page content -->
 	<div class="flex flex-col">
-		<!-- Section -->
+
+		<!-- User details -->
 		<div class="py-3">
 			<table class="table-auto">
 				<tbody>

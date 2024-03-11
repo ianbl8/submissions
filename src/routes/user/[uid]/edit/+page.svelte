@@ -33,7 +33,6 @@
 <PageTitle title="Edit: {user.forename} {user.surname}" />
 
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
 		{#if user.id == loggedInUser?.id}
 			<h1 class="text-4xl font-semibold">Edit your details</h1>
@@ -46,7 +45,8 @@
 
 	<!-- Page content -->
 	<div class="flex flex-col">
-		<!-- Section -->
+
+		<!-- User details form -->
 		<div class="form">
 			<form method="POST" use:enhance={handleSubmit} bind:this={newUserForm}>
 				<div>
