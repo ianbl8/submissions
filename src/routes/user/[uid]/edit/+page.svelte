@@ -14,12 +14,13 @@
 	let loading = false;
 	let roles = ['Admin', 'Tutor', 'Student', 'Reviewer'];
 	let statuses = ['Pending', 'Active', 'Completed', 'Removed'];
-	let forename: string = user?.forename;
-	let surname: string = user?.surname;
-	let email: string = user?.email;
-	let role: string = user?.role;
-	let status: string = user?.status;
-	let student_id: string = user?.student_id;
+	let id: string = user.id;
+	let forename = user.forename;
+	let surname = user.surname;
+	let email = user.email;
+	let role = user.role;
+	let status = user.status;
+	let student_id = user.student_id;
 	let selected_role: string;
 
 	const handleSubmit: SubmitFunction = () => {
@@ -49,6 +50,7 @@
 		<!-- User details form -->
 		<div class="form">
 			<form method="POST" use:enhance={handleSubmit} bind:this={newUserForm}>
+				<input id="id" name="id" type="hidden" value={id} />
 				<div>
 					<label class="label mt-4" for="forename">Forename</label>
 					<input
@@ -100,6 +102,8 @@
 					  {#each statuses as s}
 							{#if s == (form?.status ?? status)}
 					    	<option value={s} selected>{s}</option>
+							{:else if loggedInUser.role == 'Admin'}
+						    <option value={s}>{s}</option>
 							{:else}
 						    <option value={s} disabled>{s}</option>
 							{/if}
