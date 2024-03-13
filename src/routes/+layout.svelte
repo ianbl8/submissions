@@ -59,12 +59,11 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<a href="/">
+				<a href="/dashboard">
 					<strong class="text-3xl text-primary-600 dark:text-primary-400 font-bold">
 						Submissions
 					</strong>
 				</a>
-				<a href="/dashboard" class="text-3xl px-4">Home</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />

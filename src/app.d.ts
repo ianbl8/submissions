@@ -3,6 +3,7 @@
 // and what to do when importing types
 
 import { SupabaseClient, Session } from "@supabase/supabase-js"
+import { Database } from '$lib/types/supabase'
 
 declare global {
 	namespace App {

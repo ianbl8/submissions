@@ -1,37 +1,80 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import PageTitle from '$lib/components/PageTitle.svelte';
+
+	export let data: PageData;
+
+	let { session, supabase, user, loggedInUser } = data;
+	const currentUser: Boolean = user.id == loggedInUser?.id;
+</script>
+
+<PageTitle title="User: {user.forename} {user.surname}" />
+
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-bold">User</h1>
-		<h2 class="text-2xl font-semibold">
-			<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-				/user/[uid]
-			</span>
-		</h2>
+		{#if user.id == loggedInUser?.id}
+			<h1 class="text-4xl font-semibold">Your details</h1>
+		{:else}
+			<h1 class="text-4xl font-semibold">Details: {user.forename} {user.surname}</h1>
+		{/if}
 	</div>
 
 	<!-- Page content -->
 	<div class="flex flex-col">
 
-		<!-- Section -->
+		<!-- User details -->
 		<div class="py-3">
-			<h3 class="h3 py-1">Profile</h3>
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S R
-				</span>
-			</p>
-			<p class="py-1">User details</p>
-			<p class="py-1">
-				Link to edit form:
-				<a
-					href="/user/uid/edit"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/user/[uid]/edit
-				</a>
-			</p>
+			<table class="table-auto">
+				<tbody>
+					<tr>
+						<td class="font-semibold px-1 py-1">Forename</td>
+						<td class="px-1 py-1">{user.forename}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Surname</td>
+						<td class="px-1 py-1">{user.surname}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Email</td>
+						<td class="px-1 py-1">
+							{#if currentUser}
+								{user.email}
+							{:else if user.email}
+								Yes
+							{:else}
+								No
+							{/if}
+						</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Role</td>
+						<td class="px-1 py-1">{user.role}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Status</td>
+						<td class="px-1 py-1">{user.status}</td>
+					</tr>
+					{#if user.student_id}
+						<tr>
+							<td class="font-semibold px-1 py-1">Student ID</td>
+							<td class="px-1 py-1">{user.student_id}</td>
+						</tr>
+					{/if}
+				</tbody>
+			</table>
+			{#if currentUser}
+				<p class="py-1">
+					<a class="btn btn-sm variant-ghost-tertiary" href="/user/{user.number}/edit">
+						Edit your details
+					</a>
+				</p>
+			{:else if loggedInUser?.role == 'Admin'}
+				<p class="py-1">
+					<a class="btn btn-sm variant-ghost-tertiary" href="/user/{user.number}/edit">
+						Edit these details
+					</a>
+				</p>
+			{/if}
 		</div>
-
 	</div>
-	
 </div>
