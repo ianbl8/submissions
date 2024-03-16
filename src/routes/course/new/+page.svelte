@@ -6,6 +6,7 @@
 	import { goto } from '$app/navigation';
 	import Quill from 'quill';
 	import { onMount } from 'svelte';
+	import sanitizeHtml from 'sanitize-html';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -41,7 +42,10 @@
 		// update description using Quill input
 		newCourseForm = document.querySelector('form')!
 		newCourseForm.addEventListener('formdata', (event: FormDataEvent) => {
-			description = quill.getSemanticHTML(0);
+			let html = quill.getSemanticHTML(0);
+			description = sanitizeHtml(html, {
+				allowedTags: [ 'p', 'br', 'strong', 'em', 'b', 'i', 'a', 'blockquote', 'pre', 'ol', 'ul', 'li' ],
+			})
 			event.formData.set('description', description);
 		});
 	});
