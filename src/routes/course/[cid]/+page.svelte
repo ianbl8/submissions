@@ -43,6 +43,10 @@
 						<td class="px-1 py-1">{course.code}</td>
 					</tr>
 					<tr>
+						<td class="font-semibold px-1 py-1">Description</td>
+						<td class="px-1 py-1" id="description">{@html course.description}</td>
+					</tr>
+					<tr>
 						<td class="font-semibold px-1 py-1">Start date</td>
 						<td class="px-1 py-1">{start_date}</td>
 					</tr>

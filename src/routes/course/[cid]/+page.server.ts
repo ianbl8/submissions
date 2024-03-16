@@ -11,7 +11,7 @@ export const load = async ({ params, locals: { supabase, getSession } }) => {
   // get course from database
   const { data: course } = await supabase
     .from('courses')
-    .select('id, number, name, code, start_date, end_date')
+    .select('id, number, name, code, description, start_date, end_date')
     .eq('number', params.cid)
     .single()
 
