@@ -44,7 +44,7 @@
 					</tr>
 					<tr>
 						<td class="font-semibold px-1 py-1">Description</td>
-						<td class="px-1 py-1" id="description">{@html course.description}</td>
+						<td class="px-1 py-1"><div id="description">{@html course.description}</div></td>
 					</tr>
 					<tr>
 						<td class="font-semibold px-1 py-1">Start date</td>
@@ -115,3 +115,23 @@
 	</div>
 
 </div>
+
+<!-- Styles for description -->
+<style>
+	:global(#description p) {
+		padding-top: 0.2rem;
+		padding-bottom: 0.2rem;
+	}
+
+	:global(#description ol) {
+		list-style: decimal;
+	}
+
+	:global(#description ul) {
+		list-style: circle;
+	}
+
+	:global(#description a) {
+		text-decoration: underline;
+	}
+</style>
