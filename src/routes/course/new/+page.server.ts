@@ -27,6 +27,7 @@ export const actions = {
     const formData = await request.formData();
     const name = formData.get('name');
     const code = formData.get('code');
+    const description = formData.get('description');
     const start_date = formData.get('start_date');
     const end_date = formData.get('end_date');
 
@@ -34,6 +35,7 @@ export const actions = {
     const { data: course, error } = await supabase.from('courses').upsert({
       name,
       code,
+      description,
       start_date,
       end_date,
       created_at: new Date(),
@@ -42,7 +44,7 @@ export const actions = {
 
     if (error) {
       return fail(500, {
-        name, code, start_date, end_date,
+        name, code, description, start_date, end_date,
       })
     }
     
