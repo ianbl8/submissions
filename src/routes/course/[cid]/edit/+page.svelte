@@ -4,6 +4,8 @@
 	import type { PageData, ActionData } from './$types';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import sanitizeHtml from 'sanitize-html';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -16,8 +18,39 @@
 	let id: string = course.id;
 	let name = course.name;
 	let code = course.code;
+	let description = course.description;
 	let start_date = course.start_date;
 	let end_date = course.end_date;
+
+	// set up Quill input
+	onMount(async () => {
+		const { default: Quill } = await import('quill');
+		let descriptionInput: HTMLElement = document.getElementById("description")!;
+		let quill = new Quill(descriptionInput, {
+			modules: {
+				toolbar: [
+					['bold', 'italic'],
+					['link', 'blockquote', 'code-block'],
+					[{ list: 'ordered' }, { list: 'bullet' }],
+				],
+			},
+			theme: 'snow',
+		});
+
+		if (course.description) {
+			quill.clipboard.dangerouslyPasteHTML(course.description, 'user');
+		}
+
+		 // update description using Quill input
+		editCourseForm = document.querySelector('form')!
+		editCourseForm.addEventListener('formdata', (event: FormDataEvent) => {
+			let html = quill.getSemanticHTML(0);
+			description = sanitizeHtml(html, {
+				allowedTags: [ 'p', 'br', 'strong', 'em', 'b', 'i', 'a', 'blockquote', 'pre', 'ol', 'ul', 'li' ],
+			})
+			event.formData.set('description', description);
+		});
+	});
 
 	const handleSubmit: SubmitFunction = () => {
 		loading = true;
@@ -31,6 +64,10 @@
 		}
 	};
 </script>
+
+<svelte:head>
+	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.3/dist/quill.snow.css" rel="stylesheet" />
+</svelte:head>
 
 <PageTitle title="Edit: {course.name} ({course.code})" />
 
@@ -55,6 +92,10 @@
 				<div>
 					<label class="label mt-4" for="code">Course code</label>
 					<input class="input" id="code" name="code" type="text" value={form?.code ?? code} required/>
+				</div>
+				<div>
+					<label class="label mt-4" for="description">Description</label>
+					<div id="description" /><!-- Quill input -->
 				</div>
 				<div>
 					<label class="label mt-4" for="start_date">Start date</label>

@@ -4,7 +4,6 @@
 	import type { PageData, ActionData } from './$types';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import { goto } from '$app/navigation';
-	import Quill from 'quill';
 	import { onMount } from 'svelte';
 	import sanitizeHtml from 'sanitize-html';
 
@@ -23,11 +22,10 @@
 	let end_date: string = '';
 
 	// set up Quill input
-	let quill: Quill;
-
-	onMount(() => {
+	onMount(async () => {
+		const { default: Quill } = await import('quill');
 		let descriptionInput: HTMLElement = document.getElementById("description")!;
-		quill = new Quill(descriptionInput, {
+		let quill = new Quill(descriptionInput, {
 			modules: {
 				toolbar: [
 					['bold', 'italic'],
@@ -36,7 +34,6 @@
 				],
 			},
 			theme: 'snow',
-			placeholder: description,
 		});
 
 		// update description using Quill input
