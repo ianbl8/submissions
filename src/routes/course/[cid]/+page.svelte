@@ -1,52 +1,69 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import PageTitle from '$lib/components/PageTitle.svelte';
+
+	export let data: PageData;
+
+	let { session, supabase, course, loggedInUser } = data;
+
+	let start_date = new Date(course.start_date as string).toLocaleDateString('en-IE', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	});
+	let end_date = new Date(course.end_date as string).toLocaleDateString('en-IE', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	});
+
+</script>
+
+<PageTitle title="Course: {course.name} ({course.code})" />
+
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-bold">Course</h1>
-		<h2 class="text-2xl font-semibold">
-			<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-				/course/[cid]
-			</span>
-		</h2>
+		<h2 class="text-2xl">{course.code}</h2>
+		<h1 class="text-4xl font-semibold">{course.name}</h1>
 	</div>
 
 	<!-- Page content -->
 	<div class="flex flex-col">
 
-		<!-- Section -->
+		<!-- Course details -->
 		<div class="py-3">
-			<h3 class="h3 py-1">Course details</h3>
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S R
-				</span>
-			</p>
-			<p class="py-1">Course details</p>
-			<!-- Sub section -->
-			<hr />
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: S
-				</span>
-			</p>
-			<p class="py-1">
-				Released course grade (when complete)
-			</p>
-				<!-- Sub section -->
-			<hr />
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T
-				</span>
-			</p>
-			<p class="py-1">
-				Link to edit course details:
-				<a
-					href="/course/cid/edit"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/course/[cid]/edit
-				</a>
-			</p>
+			<table class="table-auto">
+				<tbody>
+					<tr>
+						<td class="font-semibold px-1 py-1">Course name</td>
+						<td class="px-1 py-1">{course.name}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Course code</td>
+						<td class="px-1 py-1">{course.code}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Description</td>
+						<td class="px-1 py-1"><div id="description">{@html course.description}</div></td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Start date</td>
+						<td class="px-1 py-1">{start_date}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">End date</td>
+						<td class="px-1 py-1">{end_date}</td>
+					</tr>
+				</tbody>
+			</table>
+			{#if loggedInUser?.role == 'Admin'}
+				<p class="py-1">
+					<a class="btn btn-sm variant-ghost-tertiary" href="/course/{course.number}/edit">
+						Edit this course
+					</a>
+				</p>
+			{/if}
+
 		</div>
 
 		<!-- Section -->
@@ -98,3 +115,23 @@
 	</div>
 
 </div>
+
+<!-- Styles for description -->
+<style>
+	:global(#description p) {
+		padding-top: 0.2rem;
+		padding-bottom: 0.2rem;
+	}
+
+	:global(#description ol) {
+		list-style: decimal;
+	}
+
+	:global(#description ul) {
+		list-style: circle;
+	}
+
+	:global(#description a) {
+		text-decoration: underline;
+	}
+</style>
