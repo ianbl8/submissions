@@ -1,27 +1,92 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import PageTitle from '$lib/components/PageTitle.svelte';
+
+	export let data: PageData;
+
+	let { session, supabase, assignment, loggedInUser } = data;
+
+	let release_at = new Date(assignment.release_at as string).toLocaleString('en-IE', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+	let due_at = new Date(assignment.due_at as string).toLocaleString('en-IE', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+	let late_at = new Date(assignment.late_at as string).toLocaleString('en-IE', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+
+</script>
+
+<PageTitle title="Assignment: {assignment.name} ({assignment.code})" />
+
 <div class="container h-full mx-auto">
-	<!-- Page name and route -->
 	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-bold">Assignment</h1>
-		<h2 class="text-2xl font-semibold">
-			<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-				/assignment/[aid]
-			</span>
-		</h2>
+		<h2 class="text-2xl">{assignment.code}</h2>
+		<h1 class="text-4xl font-semibold">{assignment.name}</h1>
 	</div>
 
 	<!-- Page content -->
 	<div class="flex flex-col">
 
-		<!-- Section -->
+		<!-- Assignment details -->
 		<div class="py-3">
-			<h3 class="h3 py-1">Assignment details</h3>
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S R
-				</span>
-			</p>
-			<p class="py-1">Assignment details</p>
-			<p class="py-1">May link to more info elsewhere, e.g. Tutors</p>
+			<table class="table-auto">
+				<tbody>
+					<tr>
+						<td class="font-semibold px-1 py-1">Assignment name</td>
+						<td class="px-1 py-1">{assignment.name}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Assignment code</td>
+						<td class="px-1 py-1">{assignment.code}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Description</td>
+						<td class="px-1 py-1"><div id="description">{@html assignment.description}</div></td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Link to assignment</td>
+						<td class="px-1 py-1"><a href={assignment.link} target="_blank">{assignment.link}</a></td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Rubric</td>
+						<td class="px-1 py-1">{assignment.rubric}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Release date/time</td>
+						<td class="px-1 py-1">{release_at}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Due date/time</td>
+						<td class="px-1 py-1">{due_at}</td>
+					</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Open until date/time</td>
+						<td class="px-1 py-1">{late_at}</td>
+					</tr>
+				</tbody>
+			</table>
+			{#if loggedInUser?.role == 'Admin'}
+				<p class="py-1">
+					<a class="btn btn-sm variant-ghost-tertiary" href="/assignment/{assignment.number}/edit">
+						Edit this assignment
+					</a>
+				</p>
+			{/if}
+		
 			<!-- Sub section -->
 			<hr />
 			<p class="py-1">
