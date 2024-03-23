@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { Rubric } from '$lib/types/Rubric';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 
 	export let data: PageData;
@@ -27,6 +28,19 @@
 		hour: '2-digit',
 		minute: '2-digit',
 	});
+
+	const rubric = assignment.rubric as Rubric;
+
+	// range helper
+	function range(from: number, to: number) {
+		const result = [];
+		let i = from;
+		while (i <= to) {
+			result.push(i);
+			i += 1;
+		}
+		return result;
+	}
 
 </script>
 
@@ -62,8 +76,48 @@
 						<td class="px-1 py-1"><a href={assignment.link} target="_blank">{assignment.link}</a></td>
 					</tr>
 					<tr>
+						<td class="font-semibold px-1 py-1">Total marks</td>
+						<td class="px-1 py-1">{rubric.total_marks}</td>
+					</tr>
+					<tr>
 						<td class="font-semibold px-1 py-1">Rubric</td>
-						<td class="px-1 py-1">{assignment.rubric}</td>
+						<td class="px-1 py-1">
+							<table>
+								<thead>
+									<th>Rubric</th>
+									{#each range(1, rubric.areas.length) as a, i}
+										<th>{rubric.areas[i].name}</th>
+									{/each}
+								</thead>
+								<tbody>
+									{#each range(1, rubric.levels.length) as l, j}
+										<tr>
+											<td>{rubric.levels[j].name}
+												{#if rubric.show_levels_marks}
+													<br />({rubric.levels[j].min_marks} – {rubric.levels[j].max_marks})
+												{/if}
+											</td>
+											{#each range(1, rubric.areas.length) as a, i}
+												<td>{rubric.areas[i].descriptors[j]}</td>
+											{/each}
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						</td>
+						</tr>
+					<tr>
+						<td class="font-semibold px-1 py-1">Requirements</td>
+						<td class="px-1 py-1">
+							<ul>
+								{#if rubric.require_self_assessment}<li>Complete the self-assessment grid</li>{/if}
+								{#if rubric.require_files}<li>Upload file(s)</li>{/if}
+								{#if rubric.require_repo}<li>Provide a link to your repo</li>{/if}
+								{#if rubric.require_url}<li>Provide a link to your website</li>{/if}
+								{#if rubric.require_audio}<li>Provide a link to your audio recording</li>{/if}
+								{#if rubric.require_video}<li>Provide a link to your video recording</li>{/if}
+							</ul>
+						</td>
 					</tr>
 					<tr>
 						<td class="font-semibold px-1 py-1">Release date/time</td>
