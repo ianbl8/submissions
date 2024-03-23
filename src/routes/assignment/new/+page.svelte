@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData, ActionData } from './$types';
+	import type { Levels, Areas } from '$lib/types/Rubric';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -25,7 +26,6 @@
 
 	// rubric object
 	let total_marks: number = 100;
-	type Levels = { name: string; min_marks: number; max_marks: number }[];
 	let levels: Levels = [
 		{ name: '', min_marks: 0, max_marks: 39 },
 		{ name: '', min_marks: 40, max_marks: 49 },
@@ -44,17 +44,16 @@
 		}
 	};
 	let show_levels_marks: boolean = true;
-	type Areas = { name: string; marks: number; descriptor: Array<string> }[];
 	let areas: Areas = [
-		{ name: '', marks: 20, descriptor: [] },
-		{ name: '', marks: 20, descriptor: [] },
-		{ name: '', marks: 20, descriptor: [] },
-		{ name: '', marks: 20, descriptor: [] },
-		{ name: '', marks: 20, descriptor: [] }
+		{ name: '', marks: 20, descriptors: [] },
+		{ name: '', marks: 20, descriptors: [] },
+		{ name: '', marks: 20, descriptors: [] },
+		{ name: '', marks: 20, descriptors: [] },
+		{ name: '', marks: 20, descriptors: [] }
 	];
 	const addArea = () => {
 		if (areas.length < 7) {
-			areas = [...areas, { name: '', marks: 20, descriptor: [] }];
+			areas = [...areas, { name: '', marks: 20, descriptors: [] }];
 		}
 	};
 	const removeArea = () => {
@@ -362,15 +361,15 @@
 						</div>
 						{#each range(1, levels.length) as l, j}
 							<div>
-								<label class="label mt-4" for="areas[{i}].descriptor[{j}]"
-									>Descriptor for Level {l}</label
+								<label class="label mt-4" for="areas[{i}].descriptors[{j}]"
+									>Descriptors for Level {l}</label
 								>
 								<input
 									class="input"
-									id="areas[{i}].descriptor[{j}]"
-									name="areas[{i}].descriptor[{j}]"
+									id="areas[{i}].descriptors[{j}]"
+									name="areas[{i}].descriptors[{j}]"
 									type="text"
-									bind:value={areas[i].descriptor[j]}
+									bind:value={areas[i].descriptors[j]}
 								/>
 							</div>
 						{/each}
