@@ -12,23 +12,24 @@
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
-		minute: '2-digit',
+		minute: '2-digit'
 	});
 	let due_at = new Date(assignment.due_at as string).toLocaleString('en-IE', {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
-		minute: '2-digit',
+		minute: '2-digit'
 	});
 	let late_at = new Date(assignment.late_at as string).toLocaleString('en-IE', {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
-		minute: '2-digit',
+		minute: '2-digit'
 	});
 
+	const { name, code, description, link, number } = assignment;
 	const rubric = assignment.rubric as Rubric;
 
 	// range helper
@@ -41,152 +42,124 @@
 		}
 		return result;
 	}
-
 </script>
 
-<PageTitle title="Assignment: {assignment.name} ({assignment.code})" />
+<PageTitle title="Assignment: {name} ({code})" />
 
-<div class="container h-full mx-auto">
-	<div class="pt-8 pb-4">
-		<h2 class="text-2xl">{assignment.code}</h2>
-		<h1 class="text-4xl font-semibold">{assignment.name}</h1>
-	</div>
-
-	<!-- Page content -->
-	<div class="flex flex-col">
-
-		<!-- Assignment details -->
-		<div class="py-3">
-			<table class="table-auto">
+<main class="container h-full mx-auto">
+	<header class="pt-8 pb-4">
+		<p class="px-1 pb-1">
+			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text primary-400">Assignment</span>
+			<span class="text-2xl md:text-3xl">&nbsp;{code}</span>
+		</p>
+		<h1 class="h1 font-semibold px-1 py-1">{name}</h1>
+	</header>
+	<section class="flex flex-col">
+		<div class="flex flex-row">
+			<!-- Buttons -->
+			<div class="px-1 pb-4">
+				{#if loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Student'}
+					<p class="py-1">
+						<a
+							class="btn btn-sm font-semibold text-xl variant-ghost-primary"
+							href="/assignment/{number}/submit"
+						>
+							Submit
+						</a>
+					</p>
+				{/if}
+			</div>
+			<div class="px-1">
+				{#if loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Tutor'}
+					<p class="py-1">
+						<a
+							class="btn btn-sm font-semibold text-xl variant-ghost-secondary"
+							href="/assignment/{number}/grade"
+						>
+							Grade
+						</a>
+					</p>
+				{/if}
+			</div>
+			<div class="px-1">
+				{#if loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Tutor'}
+					<p class="py-1">
+						<a
+							class="btn btn-sm font-semibold text-xl variant-ghost-tertiary"
+							href="/assignment/{number}/edit"
+						>
+							Edit
+						</a>
+					</p>
+				{/if}
+			</div>
+		</div>
+		<!-- Description -->
+		<div class="px-1">
+			<h3 class="h3 font-semibold pb-1">Description</h3>
+			<p class="pb-4">{@html description}</p>
+		<!-- Details -->
+		<h3 class="h3 font-semibold pb-1">Details</h3>
+		</div>
+		<div class="flex flex-col md:flex-row">
+			<div class="basis-1/2 px-1">
+				<h4 class="h4">Assignment release</h4>
+				<p class="pb-4 font-semibold">{release_at}</p>
+				<h4 class="h4">Submissions are due by</h4>
+				<p class="pb-4 font-semibold">{due_at}</p>
+				<h4 class="h4">Late submissions allowed until</h4>
+				<p class="pb-4 font-semibold">{late_at}</p>
+			</div>
+			<div class="basis-1/2 px-1">
+				<h4 class="h4">Link to assignment on course website</h4>
+				<p class="pb-4"><a class="anchor" href={link} target="_blank">{link}</a></p>
+				{#if rubric.show_levels_marks}
+					<h4 class="h4">Total marks</h4>
+					<p class="pb-4">{rubric.total_marks}</p>
+				{/if}
+				<h4 class="h4">Requirements</h4>
+				<ul class="list-disc list-inside pb-4">
+					{#if rubric.require_self_assessment}<li>Complete the self-assessment grid</li>{/if}
+					{#if rubric.require_files}<li>Upload file(s)</li>{/if}
+					{#if rubric.require_repo}<li>Provide a link to your repo</li>{/if}
+					{#if rubric.require_url}<li>Provide a link to your website</li>{/if}
+					{#if rubric.require_audio}<li>Provide a link to your audio recording</li>{/if}
+					{#if rubric.require_video}<li>Provide a link to your video recording</li>{/if}
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- Rubric-->
+	<section class="flex flex-col">
+		<h3 class="h3 font-semibold">Rubric</h3>
+		<div class="table-container">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th></th>
+						{#each range(1, rubric.areas.length) as a, i}
+							<th>{rubric.areas[i].name}</th>
+						{/each}
+					</tr>
+				</thead>
 				<tbody>
-					<tr>
-						<td class="font-semibold px-1 py-1">Assignment name</td>
-						<td class="px-1 py-1">{assignment.name}</td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Assignment code</td>
-						<td class="px-1 py-1">{assignment.code}</td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Description</td>
-						<td class="px-1 py-1"><div id="description">{@html assignment.description}</div></td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Link to assignment</td>
-						<td class="px-1 py-1"><a href={assignment.link} target="_blank">{assignment.link}</a></td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Total marks</td>
-						<td class="px-1 py-1">{rubric.total_marks}</td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Rubric</td>
-						<td class="px-1 py-1">
-							<table>
-								<thead>
-									<th>Rubric</th>
-									{#each range(1, rubric.areas.length) as a, i}
-										<th>{rubric.areas[i].name}</th>
-									{/each}
-								</thead>
-								<tbody>
-									{#each range(1, rubric.levels.length) as l, j}
-										<tr>
-											<td>{rubric.levels[j].name}
-												{#if rubric.show_levels_marks}
-													<br />({rubric.levels[j].min_marks} – {rubric.levels[j].max_marks})
-												{/if}
-											</td>
-											{#each range(1, rubric.areas.length) as a, i}
-												<td>{rubric.areas[i].descriptors[j]}</td>
-											{/each}
-										</tr>
-									{/each}
-								</tbody>
-							</table>
-						</td>
+					{#each range(1, rubric.levels.length) as l, j}
+						<tr>
+							<th>
+								{rubric.levels[j].name}
+								{#if rubric.show_levels_marks}
+									<p class="p font-normal">
+										{rubric.levels[j].min_marks}–{rubric.levels[j].max_marks}
+									</p>
+								{/if}
+							</th>
+							{#each range(1, rubric.areas.length) as a, i}
+								<td>{rubric.areas[i].descriptors[j]}</td>
+							{/each}
 						</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Requirements</td>
-						<td class="px-1 py-1">
-							<ul>
-								{#if rubric.require_self_assessment}<li>Complete the self-assessment grid</li>{/if}
-								{#if rubric.require_files}<li>Upload file(s)</li>{/if}
-								{#if rubric.require_repo}<li>Provide a link to your repo</li>{/if}
-								{#if rubric.require_url}<li>Provide a link to your website</li>{/if}
-								{#if rubric.require_audio}<li>Provide a link to your audio recording</li>{/if}
-								{#if rubric.require_video}<li>Provide a link to your video recording</li>{/if}
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Release date/time</td>
-						<td class="px-1 py-1">{release_at}</td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Due date/time</td>
-						<td class="px-1 py-1">{due_at}</td>
-					</tr>
-					<tr>
-						<td class="font-semibold px-1 py-1">Open until date/time</td>
-						<td class="px-1 py-1">{late_at}</td>
-					</tr>
+					{/each}
 				</tbody>
 			</table>
-			{#if loggedInUser?.role == 'Admin'}
-				<p class="py-1">
-					<a class="btn btn-sm variant-ghost-tertiary" href="/assignment/{assignment.number}/edit">
-						Edit this assignment
-					</a>
-				</p>
-			{/if}
-		
-			<!-- Sub section -->
-			<hr />
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S
-				</span>
-			</p>
-			<p class="py-1">
-				Link to submit assignment:
-				<a
-					href="/assignment/aid/submit"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/assignment/[aid]/submit
-				</a>
-			</p>
-			<p class="py-1">
-				Released assignment grade (when complete)
-			</p>
-				<!-- Sub section -->
-			<hr />
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T
-				</span>
-			</p>
-			<p class="py-1">
-				Link to edit assignment details:
-				<a
-					href="/assignment/aid/edit"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/assignment/[aid]/edit
-				</a>
-			</p>
-			<p class="py-1">
-				Link to assignment submissions for grading:
-				<a
-					href="/assignment/aid/grade"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/assignment/[aid]/grade
-				</a>
-			</p>
 		</div>
-
-	</div>
-
-</div>
+	</section>
+</main>
