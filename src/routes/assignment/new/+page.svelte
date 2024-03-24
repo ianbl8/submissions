@@ -477,8 +477,9 @@
 				<!-- Submit -->
 				<div>
 					<input
+						id="submit"
 						type="submit"
-						class="btn btn-md variant-ghost-primary mt-4"
+						class="btn btn-md variant-ghost-primary mt-4 font-bold fixed top-8 md:top-12 mt-12 right-0 md:right-4 mr-4 text-lg md:text-xl"
 						value={loading ? 'Loading...' : 'Save'}
 						disabled={loading}
 					/>
@@ -487,3 +488,13 @@
 		</div>
 	</section>
 </main>
+
+<!--
+<style>
+	#submit {
+		position: fixed;
+		top: 80px;
+		right: 20px;
+	}
+</style>
+-->
