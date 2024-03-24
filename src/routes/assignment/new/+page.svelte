@@ -24,7 +24,7 @@
 	let due_at: string = '';
 	let late_at: string = '';
 
-	// rubric object
+	// rubric object properties
 	let total_marks: number = 100;
 	let levels: Levels = [
 		{ name: '', min_marks: 0, max_marks: 39 },
@@ -139,47 +139,55 @@
 
 <PageTitle title="New assignment" />
 
-<div class="container h-full mx-auto">
-	<!-- Page name and route -->
-	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-bold">New Assignment</h1>
-		<h3 class="h3 py-1 mt-4">Please enter the assignment details</h3>
-	</div>
-
-	<!-- Page content -->
-	<div class="flex flex-col">
+<main class="container h-full mx-auto">
+	<header class="pt-8 pb-4">
+		<p class="px-1 pb-1">
+			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text primary-400"
+				>Assignment</span
+			>
+		</p>
+		<h1 class="h1 font-semibold px-1 py-1">New assignment</h1>
+	</header>
+	<section class="flex flex-col">
 		<!-- New assignment form -->
 		<div class="form">
 			<form method="POST" use:enhance={handleSubmit} bind:this={newAssignmentForm}>
-				<div>
-					<label class="label mt-4" for="name">Assignment name</label>
-					<input
-						class="input"
-						id="name"
-						name="name"
-						type="text"
-						value={form?.name ?? name}
-						required
-					/>
+				<div class="flex flex-col md:flex-row">
+					<div class="grow md:basis-2/3 px-4">
+						<label class="label mt-4" for="name">Assignment name (required)</label>
+						<input
+							class="input"
+							id="name"
+							name="name"
+							type="text"
+							value={form?.name ?? name}
+							required
+						/>
+					</div>
+					<div class="grow md:basis-1/3 px-4">
+						<label class="label mt-4" for="code">Assignment code (required)</label>
+						<input
+							class="input"
+							id="code"
+							name="code"
+							type="text"
+							value={form?.code ?? code}
+							required
+						/>
+					</div>
 				</div>
-				<div>
-					<label class="label mt-4" for="code">Assignment code</label>
-					<input
-						class="input"
-						id="code"
-						name="code"
-						type="text"
-						value={form?.code ?? code}
-						required
+				<div class="px-4">
+					<label class="label mt-4" for="description">Description (required)</label>
+					<div
+						id="description"
+						class="border-2 rounded-b-lg border-stone-900 bg-surface-200 dark:bg-surface-700"
 					/>
-				</div>
-				<div>
-					<label class="label mt-4" for="description">Description</label>
-					<div id="description" />
 					<!-- Quill input -->
 				</div>
-				<div>
-					<label class="label mt-4" for="link">Link to assignment</label>
+				<div class="px-4">
+					<label class="label mt-4" for="link"
+						>Link to assignment on course website (required)</label
+					>
 					<input
 						class="input"
 						id="link"
@@ -189,257 +197,283 @@
 						required
 					/>
 				</div>
-				<div>
-					<label class="label mt-4" for="release_at">Release date/time</label>
-					<input
-						class="input"
-						id="release_at"
-						name="release_at"
-						type="datetime-local"
-						value={form?.release_at ?? release_at}
-						required
-					/>
+				<div class="flex flex-col md:flex-row">
+					<div class="grow md:basis-1/3 px-4">
+						<label class="label mt-4" for="release_at">Assignment release date/time</label>
+						<input
+							class="input"
+							id="release_at"
+							name="release_at"
+							type="datetime-local"
+							value={form?.release_at ?? release_at}
+							required
+						/>
+					</div>
+					<div class="grow md:basis-1/3 px-4">
+						<label class="label mt-4" for="due_at">Submissions due by date/time</label>
+						<input
+							class="input"
+							id="due_at"
+							name="due_at"
+							type="datetime-local"
+							value={form?.due_at ?? due_at}
+							required
+						/>
+					</div>
+					<div class="grow md:basis-1/3 px-4">
+						<label class="label mt-4" for="late_at">Open for late submissions until</label>
+						<input
+							class="input"
+							id="late_at"
+							name="late_at"
+							type="datetime-local"
+							value={form?.late_at ?? late_at}
+							required
+						/>
+					</div>
 				</div>
-				<div>
-					<label class="label mt-4" for="due_at">Due date/time</label>
-					<input
-						class="input"
-						id="due_at"
-						name="due_at"
-						type="datetime-local"
-						value={form?.due_at ?? due_at}
-						required
-					/>
-				</div>
-				<div>
-					<label class="label mt-4" for="late_at">Open until date/time</label>
-					<input
-						class="input"
-						id="late_at"
-						name="late_at"
-						type="datetime-local"
-						value={form?.late_at ?? late_at}
-						required
-					/>
+				<!-- Requirements -->
+				<div class="pt-4">
+					<fieldset class="border border-solid border-stone-500 px-4 py-4">
+						<legend class="font-semibold">Requirements</legend>
+						<div class="flex flex-col md:flex-row">
+							<div class="grow md:basis-1/3 px-4">
+								<div>
+									<label class="label mt-2" for="require_self_assessment"
+										><input
+											class="checkbox mr-1"
+											id="require_self_assessment"
+											name="require_self_assessment"
+											type="checkbox"
+											bind:checked={require_self_assessment}
+										/> Self assessment using the rubric
+									</label>
+								</div>
+								<div>
+									<label class="label mt-2" for="require_files">
+										<input
+											class="checkbox mr-1"
+											id="require_files"
+											name="require_files"
+											type="checkbox"
+											bind:checked={require_files}
+										/> File uploads</label
+									>
+								</div>
+							</div>
+							<div class="grow md:basis-1/3 px-4">
+								<div>
+									<label class="label mt-2" for="require_repo"
+										><input
+											class="checkbox mr-1"
+											id="require_repo"
+											name="require_repo"
+											type="checkbox"
+											bind:checked={require_repo}
+										/> Link to a repository (e.g. GitHub)</label
+									>
+								</div>
+								<div>
+									<label class="label mt-2" for="require_url"
+										><input
+											class="checkbox mr-1"
+											id="require_url"
+											name="require_url"
+											type="checkbox"
+											bind:checked={require_url}
+										/> Link to a website</label
+									>
+								</div>
+							</div>
+							<div class="grow md:basis-1/3 px-4">
+								<div>
+									<label class="label mt-2" for="require_audio"
+										><input
+											class="checkbox mr-1"
+											id="require_audio"
+											name="require_audio"
+											type="checkbox"
+											bind:checked={require_audio}
+										/> Link to an audio recording</label
+									>
+								</div>
+								<div>
+									<label class="label mt-2" for="require_video"
+										><input
+											class="checkbox mr-1"
+											id="require_video"
+											name="require_video"
+											type="checkbox"
+											bind:checked={require_video}
+										/> Link to a video recording</label
+									>
+								</div>
+							</div>
+						</div>
+					</fieldset>
 				</div>
 				<!-- Rubric -->
-				<hr class="mt-4 pt-4" />
-				<h2 class="h2">Rubric</h2>
-				<div>
-					<label class="label mt-4" for="total_marks">Total marks available (e.g. 100)</label>
-					<input
-						class="input"
-						id="total_marks"
-						name="total_marks"
-						type="number"
-						value={form?.total_marks ?? total_marks}
-					/>
+				<div class="mt-4 pt-4 px-4">
+					<h3 class="h3">Rubric</h3>
 				</div>
-				<fieldset class="border border-solid border-stone-900 p-3">
-					<legend class="font-semibold">Levels</legend>
-					<div class="mt-4">
-						Number of levels: <span class="font-bold">{levels.length}</span>
-						&nbsp;&nbsp;&nbsp;
-						{#if levels.length < 7}
-							<button class="btn btn-sm variant-ghost-secondary" on:click|preventDefault={addLevel}
-								>Add a level</button
-							>
-						{:else}
-							<button
-								class="btn btn-sm variant-ghost-secondary"
-								on:click|preventDefault={addLevel}
-								disabled>Add a level</button
-							>
-						{/if}
-						{#if levels.length > 2}
-							<button
-								class="btn btn-sm variant-ghost-secondary"
-								on:click|preventDefault={removeLevel}>Remove a level</button
-							>
-						{:else}
-							<button
-								class="btn btn-sm variant-ghost-secondary"
-								on:click|preventDefault={removeLevel}
-								disabled>Remove a level</button
-							>
-						{/if}
-					</div>
-					{#each range(1, levels.length) as l, i}
-						<div>
-							<label class="label mt-4" for="levels[{i}].name">Level {l}</label>
+				<div class="flex flex-col md:flex-row">
+					<div class="grow px-4 pt-4">
+						<div class="pb-4">
+							<label class="label mt-4" for="total_marks">Total marks available (e.g. 100)</label>
 							<input
 								class="input"
-								id="levels[{i}].name"
-								name="levels[{i}].name"
-								type="text"
-								bind:value={levels[i].name}
-							/>
-						</div>
-						<div>
-							<label class="label mt-4" for="levels[{i}].min_marks">Min marks</label>
-							<input
-								class="input"
-								id="levels[{i}].min_marks"
-								name="levels[{i}].min_marks"
+								id="total_marks"
+								name="total_marks"
 								type="number"
-								bind:value={levels[i].min_marks}
+								value={form?.total_marks ?? total_marks}
 							/>
 						</div>
-						<div>
-							<label class="label mt-4" for="levels[{i}].max_marks">Max marks</label>
-							<input
-								class="input"
-								id="levels[{i}].max_marks"
-								name="levels[{i}].max_marks"
-								type="number"
-								bind:value={levels[i].max_marks}
-							/>
-						</div>
-					{/each}
-					<div>
-						<label class="label mt-4" for="show_levels_marks"
-							>Show the mark range for each level</label
-						>
-						<input
-							class="checkbox"
-							id="show_levels_marks"
-							name="show_levels_marks"
-							type="checkbox"
-							bind:checked={show_levels_marks}
-						/>
-					</div>
-				</fieldset>
-				<fieldset class="border border-solid border-stone-900 p-3">
-					<legend class="font-semibold">Areas</legend>
-					<div class="mt-4">
-						Number of areas: <span class="font-bold">{areas.length}</span>
-						&nbsp;&nbsp;&nbsp;
-						{#if areas.length < 7}
-							<button class="btn btn-sm variant-ghost-secondary" on:click|preventDefault={addArea}
-								>Add an area</button
-							>
-						{:else}
-							<button
-								class="btn btn-sm variant-ghost-secondary"
-								on:click|preventDefault={addArea}
-								disabled>Add an area</button
-							>
-						{/if}
-						{#if areas.length > 1}
-							<button
-								class="btn btn-sm variant-ghost-secondary"
-								on:click|preventDefault={removeArea}>Remove an area</button
-							>
-						{:else}
-							<button
-								class="btn btn-sm variant-ghost-secondary"
-								on:click|preventDefault={removeArea}
-								disabled>Remove an area</button
-							>
-						{/if}
-					</div>
-					{#each range(1, areas.length) as a, i}
-						<div>
-							<label class="label mt-4" for="areas[{i}].name">Area {a}</label>
-							<input
-								class="input"
-								id="areas[{i}].name"
-								name="areas[{i}].name"
-								type="text"
-								bind:value={areas[i].name}
-							/>
-						</div>
-						<div>
-							<label class="label mt-4" for="areas[{i}].min_marks">Marks allowed</label>
-							<input
-								class="input"
-								id="areas[{i}].marks"
-								name="areas[{i}].marks"
-								type="number"
-								bind:value={areas[i].marks}
-							/>
-						</div>
-						{#each range(1, levels.length) as l, j}
-							<div>
-								<label class="label mt-4" for="areas[{i}].descriptors[{j}]"
-									>Descriptors for Level {l}</label
-								>
-								<input
-									class="input"
-									id="areas[{i}].descriptors[{j}]"
-									name="areas[{i}].descriptors[{j}]"
-									type="text"
-									bind:value={areas[i].descriptors[j]}
-								/>
+						<fieldset class="border border-solid border-stone-500 px-4 py-4">
+							<legend class="font-semibold">Levels</legend>
+							<div class="mt-4">
+								Number of levels: <span class="font-bold">{levels.length}</span>
+								&nbsp;&nbsp;&nbsp;
+								{#if levels.length < 7}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={addLevel}>Add a level</button
+									>
+								{:else}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={addLevel}
+										disabled>Add a level</button
+									>
+								{/if}
+								{#if levels.length > 2}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={removeLevel}>Remove a level</button
+									>
+								{:else}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={removeLevel}
+										disabled>Remove a level</button
+									>
+								{/if}
 							</div>
-						{/each}
-					{/each}
-				</fieldset>
-				<fieldset class="border border-solid border-stone-900 p-3">
-					<legend class="font-semibold">Requirements</legend>
-					<div>
-						<label class="label mt-4" for="require_self_assessment"
-							>Self assessment using the rubric</label
-						>
-						<input
-							class="checkbox"
-							id="require_self_assessment"
-							name="require_self_assessment"
-							type="checkbox"
-							bind:checked={require_self_assessment}
-						/>
+							{#each range(1, levels.length) as l, i}
+								<div>
+									<label class="label mt-4" for="levels[{i}].name">Level {l}</label>
+									<input
+										class="input"
+										id="levels[{i}].name"
+										name="levels[{i}].name"
+										type="text"
+										bind:value={levels[i].name}
+									/>
+								</div>
+								<div>
+									<label class="label mt-4" for="levels[{i}].min_marks">Min marks</label>
+									<input
+										class="input"
+										id="levels[{i}].min_marks"
+										name="levels[{i}].min_marks"
+										type="number"
+										bind:value={levels[i].min_marks}
+									/>
+								</div>
+								<div>
+									<label class="label mt-4" for="levels[{i}].max_marks">Max marks</label>
+									<input
+										class="input"
+										id="levels[{i}].max_marks"
+										name="levels[{i}].max_marks"
+										type="number"
+										bind:value={levels[i].max_marks}
+									/>
+								</div>
+							{/each}
+							<div>
+								<label class="label mt-4" for="show_levels_marks"
+									><input
+										class="checkbox mr-1"
+										id="show_levels_marks"
+										name="show_levels_marks"
+										type="checkbox"
+										bind:checked={show_levels_marks}
+									/> Show the mark range for each level</label
+								>
+							</div>
+						</fieldset>
 					</div>
-					<div>
-						<label class="label mt-4" for="require_files">File uploads</label>
-						<input
-							class="checkbox"
-							id="require_files"
-							name="require_files"
-							type="checkbox"
-							bind:checked={require_files}
-						/>
+					<div class="grow px-4 pt-4">
+						<fieldset class="border border-solid border-stone-500 px-4 py-4">
+							<legend class="font-semibold">Areas</legend>
+							<div class="mt-4">
+								Number of areas: <span class="font-bold">{areas.length}</span>
+								&nbsp;&nbsp;&nbsp;
+								{#if areas.length < 7}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={addArea}>Add an area</button
+									>
+								{:else}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={addArea}
+										disabled>Add an area</button
+									>
+								{/if}
+								{#if areas.length > 1}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={removeArea}>Remove an area</button
+									>
+								{:else}
+									<button
+										class="btn btn-sm variant-ghost-secondary"
+										on:click|preventDefault={removeArea}
+										disabled>Remove an area</button
+									>
+								{/if}
+							</div>
+							{#each range(1, areas.length) as a, i}
+								<div>
+									<label class="label mt-4" for="areas[{i}].name">Area {a}</label>
+									<input
+										class="input"
+										id="areas[{i}].name"
+										name="areas[{i}].name"
+										type="text"
+										bind:value={areas[i].name}
+									/>
+								</div>
+								<div>
+									<label class="label mt-4" for="areas[{i}].min_marks">Marks allowed</label>
+									<input
+										class="input"
+										id="areas[{i}].marks"
+										name="areas[{i}].marks"
+										type="number"
+										bind:value={areas[i].marks}
+									/>
+								</div>
+								{#each range(1, levels.length) as l, j}
+									<div>
+										<label class="label mt-4" for="areas[{i}].descriptors[{j}]"
+											>Descriptors for Level {l}</label
+										>
+										<input
+											class="input"
+											id="areas[{i}].descriptors[{j}]"
+											name="areas[{i}].descriptors[{j}]"
+											type="text"
+											bind:value={areas[i].descriptors[j]}
+										/>
+									</div>
+								{/each}
+							{/each}
+						</fieldset>
 					</div>
-					<div>
-						<label class="label mt-4" for="require_repo">Link to a repository (e.g. GitHub)</label>
-						<input
-							class="checkbox"
-							id="require_repo"
-							name="require_repo"
-							type="checkbox"
-							bind:checked={require_repo}
-						/>
-					</div>
-					<div>
-						<label class="label mt-4" for="require_url">Link to a website</label>
-						<input
-							class="checkbox"
-							id="require_url"
-							name="require_url"
-							type="checkbox"
-							bind:checked={require_url}
-						/>
-					</div>
-					<div>
-						<label class="label mt-4" for="require_audio">Link to an audio recording</label>
-						<input
-							class="checkbox"
-							id="require_audio"
-							name="require_audio"
-							type="checkbox"
-							bind:checked={require_audio}
-						/>
-					</div>
-					<div>
-						<label class="label mt-4" for="require_video">Link to a video recording</label>
-						<input
-							class="checkbox"
-							id="require_video"
-							name="require_video"
-							type="checkbox"
-							bind:checked={require_video}
-						/>
-					</div>
-				</fieldset>
+				</div>
+
 				<!-- Submit -->
 				<div>
 					<input
@@ -451,5 +485,5 @@
 				</div>
 			</form>
 		</div>
-	</div>
-</div>
+	</section>
+</main>
