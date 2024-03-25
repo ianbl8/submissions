@@ -7,3 +7,28 @@ html,
 body {
 	@apply h-full overflow-hidden;
 }
+
+
+.ql-toolbar {
+	@apply rounded-t-lg;
+}
+
+.ql-container.ql-snow {
+	@apply border-surface-400 dark:border-surface-500 bg-surface-200 dark:bg-surface-700 text-base;
+}
+
+.ql-toolbar.ql-snow{
+	@apply border-surface-400 dark:border-surface-500;
+}
+
+.ql-snow .ql-stroke, .ql-snow .ql-stroke-miter {
+	@apply stroke-surface-600 dark:stroke-surface-300;
+}
+
+.ql-snow .ql-fill {
+	@apply fill-surface-600 dark:fill-surface-300;
+}
+
+.ql-snow .ql-stroke.ql-fill {
+	@apply fill-none;
+}

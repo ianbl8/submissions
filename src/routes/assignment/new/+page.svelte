@@ -176,11 +176,11 @@
 						/>
 					</div>
 				</div>
-				<div class="px-4">
+				<div class="px-4 ">
 					<label class="label mt-4" for="description">Description (required)</label>
 					<div
 						id="description"
-						class="border-2 rounded-b-lg border-stone-900 bg-surface-200 dark:bg-surface-700"
+						class="rounded-b-lg"
 					/>
 					<!-- Quill input -->
 				</div>
@@ -233,8 +233,8 @@
 					</div>
 				</div>
 				<!-- Requirements -->
-				<div class="pt-4">
-					<fieldset class="border border-solid border-stone-500 px-4 py-4">
+				<div class="pt-4 px-4">
+					<fieldset class="border border-solid border-surface-400 dark:border-surface-500 px-4 py-4">
 						<legend class="font-semibold">Requirements</legend>
 						<div class="flex flex-col md:flex-row">
 							<div class="grow md:basis-1/3 px-4">
@@ -328,7 +328,7 @@
 								value={form?.total_marks ?? total_marks}
 							/>
 						</div>
-						<fieldset class="border border-solid border-stone-500 px-4 py-4">
+						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 px-4 py-4">
 							<legend class="font-semibold">Levels</legend>
 							<div class="mt-4">
 								Number of levels: <span class="font-bold">{levels.length}</span>
@@ -404,7 +404,7 @@
 						</fieldset>
 					</div>
 					<div class="grow px-4 pt-4">
-						<fieldset class="border border-solid border-stone-500 px-4 py-4">
+						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 px-4 py-4">
 							<legend class="font-semibold">Areas</legend>
 							<div class="mt-4">
 								Number of areas: <span class="font-bold">{areas.length}</span>
@@ -479,7 +479,7 @@
 					<input
 						id="submit"
 						type="submit"
-						class="btn btn-md variant-ghost-primary mt-4 font-bold fixed top-8 md:top-12 mt-12 right-0 md:right-4 mr-4 text-lg md:text-xl"
+						class="btn btn-md variant-ghost-primary font-bold fixed top-8 md:top-12 mt-12 right-0 md:right-4 mr-4 text-lg md:text-xl"
 						value={loading ? 'Loading...' : 'Save'}
 						disabled={loading}
 					/>
@@ -488,13 +488,3 @@
 		</div>
 	</section>
 </main>
-
-<!--
-<style>
-	#submit {
-		position: fixed;
-		top: 80px;
-		right: 20px;
-	}
-</style>
--->
