@@ -141,12 +141,12 @@
 
 <main class="container h-full mx-auto">
 	<header class="pt-8 pb-4">
-		<p class="px-1 pb-1">
+		<p class="px-4 pb-1">
 			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text primary-400"
 				>Assignment</span
 			>
 		</p>
-		<h1 class="h1 font-semibold px-1 py-1">New assignment</h1>
+		<h1 class="h1 font-semibold px-4 py-1">New assignment</h1>
 	</header>
 	<section class="flex flex-col">
 		<!-- New assignment form -->
@@ -336,25 +336,25 @@
 								{#if levels.length < 7}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={addLevel}>Add a level</button
+										on:click|preventDefault={addLevel}>Add</button
 									>
 								{:else}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
 										on:click|preventDefault={addLevel}
-										disabled>Add a level</button
+										disabled>Add</button
 									>
 								{/if}
 								{#if levels.length > 2}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={removeLevel}>Remove a level</button
+										on:click|preventDefault={removeLevel}>Remove</button
 									>
 								{:else}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
 										on:click|preventDefault={removeLevel}
-										disabled>Remove a level</button
+										disabled>Remove</button
 									>
 								{/if}
 							</div>
@@ -412,25 +412,25 @@
 								{#if areas.length < 7}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={addArea}>Add an area</button
+										on:click|preventDefault={addArea}>Add</button
 									>
 								{:else}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
 										on:click|preventDefault={addArea}
-										disabled>Add an area</button
+										disabled>Add</button
 									>
 								{/if}
 								{#if areas.length > 1}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={removeArea}>Remove an area</button
+										on:click|preventDefault={removeArea}>Remove</button
 									>
 								{:else}
 									<button
 										class="btn btn-sm variant-ghost-secondary"
 										on:click|preventDefault={removeArea}
-										disabled>Remove an area</button
+										disabled>Remove</button
 									>
 								{/if}
 							</div>
