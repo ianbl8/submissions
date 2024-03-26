@@ -234,7 +234,7 @@
 				</div>
 				<!-- Requirements -->
 				<div class="pt-4 px-4">
-					<fieldset class="border border-solid border-surface-400 dark:border-surface-500 px-4 py-4">
+					<fieldset class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4">
 						<legend class="font-semibold">Requirements</legend>
 						<div class="flex flex-col md:flex-row">
 							<div class="grow md:basis-1/3 px-4">
@@ -328,7 +328,7 @@
 								value={form?.total_marks ?? total_marks}
 							/>
 						</div>
-						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 px-4 py-4">
+						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4">
 							<legend class="font-semibold">Levels</legend>
 							<div class="mt-4">
 								Number of levels: <span class="font-bold">{levels.length}</span>
@@ -404,7 +404,7 @@
 						</fieldset>
 					</div>
 					<div class="grow px-4 pt-4">
-						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 px-4 py-4">
+						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4">
 							<legend class="font-semibold">Areas</legend>
 							<div class="mt-4">
 								Number of areas: <span class="font-bold">{areas.length}</span>
