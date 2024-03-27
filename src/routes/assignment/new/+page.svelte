@@ -7,6 +7,8 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import sanitizeHtml from 'sanitize-html';
+	import Plus from '$lib/components/icons/Plus.svelte';
+	import Minus from '$lib/components/icons/Minus.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -139,19 +141,31 @@
 
 <PageTitle title="New assignment" />
 
-<main class="container h-full mx-auto">
-	<header class="pt-8 pb-4">
+<main class="container h-full mx-auto relative">
+	<header class="pt-4 md:pt-6 pb-4 sticky top-0 z-10 bg-surface-50 dark:bg-surface-900">
 		<p class="px-4 pb-1">
-			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text primary-400"
+			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400"
 				>Assignment</span
 			>
 		</p>
-		<h1 class="h1 font-semibold px-4 py-1">New assignment</h1>
+		<h1 class="h1 font-semibold px-4 py-1 bg-surface-50 dark:bg-surface-900">
+			New assignment
+			<!-- Submit -->
+			<button
+				id="submit"
+				type="submit"
+				form="form"
+				class="btn btn-md variant-ghost-primary font-bold float-right"
+				value={loading ? 'Saving...' : 'Save'}
+				disabled={loading}>{loading ? 'Saving...' : 'Save'}</button
+			>
+		</h1>
 	</header>
 	<section class="flex flex-col">
 		<!-- New assignment form -->
-		<div class="form">
-			<form method="POST" use:enhance={handleSubmit} bind:this={newAssignmentForm}>
+		<div class="form w-full mx-auto">
+			<form id="form" method="POST" use:enhance={handleSubmit} bind:this={newAssignmentForm}>
+				<!-- Details -->
 				<div class="flex flex-col md:flex-row">
 					<div class="grow md:basis-2/3 px-4">
 						<label class="label mt-4" for="name">Assignment name (required)</label>
@@ -176,12 +190,9 @@
 						/>
 					</div>
 				</div>
-				<div class="px-4 ">
+				<div class="px-4">
 					<label class="label mt-4" for="description">Description (required)</label>
-					<div
-						id="description"
-						class="rounded-b-lg"
-					/>
+					<div id="description" class="rounded-b-lg" />
 					<!-- Quill input -->
 				</div>
 				<div class="px-4">
@@ -234,7 +245,9 @@
 				</div>
 				<!-- Requirements -->
 				<div class="pt-4 px-4">
-					<fieldset class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4">
+					<fieldset
+						class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4"
+					>
 						<legend class="font-semibold">Requirements</legend>
 						<div class="flex flex-col md:flex-row">
 							<div class="grow md:basis-1/3 px-4">
@@ -314,80 +327,91 @@
 				</div>
 				<!-- Rubric -->
 				<div class="mt-4 pt-4 px-4">
-					<h3 class="h3">Rubric</h3>
+					<h3 class="h3 font-semibold">Rubric</h3>
 				</div>
 				<div class="flex flex-col md:flex-row">
-					<div class="grow px-4 pt-4">
-						<div class="pb-4">
-							<label class="label mt-4" for="total_marks">Total marks available (e.g. 100)</label>
+					<div class="basis-1/2 px-4">
+						<div class="flex items-center pb-4">
+							<label class="label basis-2/3" for="total_marks"
+								>Total marks available <span class="hidden sm:inline">(e.g. 100 marks)</span></label
+							>
 							<input
-								class="input"
+								class="input basis-1/3"
 								id="total_marks"
 								name="total_marks"
 								type="number"
 								value={form?.total_marks ?? total_marks}
 							/>
 						</div>
-						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4">
+						<fieldset
+							class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4"
+						>
 							<legend class="font-semibold">Levels</legend>
-							<div class="mt-4">
-								Number of levels: <span class="font-bold">{levels.length}</span>
+							<div class="flex items-center">
+								Number of levels: <span class="font-bold text-lg pl-2">{levels.length}</span>
 								&nbsp;&nbsp;&nbsp;
 								{#if levels.length < 7}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={addLevel}>Add</button
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
+										on:click|preventDefault={addLevel}><Plus /></button
 									>
 								{:else}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
 										on:click|preventDefault={addLevel}
-										disabled>Add</button
+										disabled><Plus /></button
 									>
 								{/if}
 								{#if levels.length > 2}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={removeLevel}>Remove</button
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
+										on:click|preventDefault={removeLevel}><Minus /></button
 									>
 								{:else}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
 										on:click|preventDefault={removeLevel}
-										disabled>Remove</button
+										disabled><Minus /></button
 									>
 								{/if}
 							</div>
 							{#each range(1, levels.length) as l, i}
-								<div>
-									<label class="label mt-4" for="levels[{i}].name">Level {l}</label>
-									<input
-										class="input"
-										id="levels[{i}].name"
-										name="levels[{i}].name"
-										type="text"
-										bind:value={levels[i].name}
-									/>
-								</div>
-								<div>
-									<label class="label mt-4" for="levels[{i}].min_marks">Min marks</label>
-									<input
-										class="input"
-										id="levels[{i}].min_marks"
-										name="levels[{i}].min_marks"
-										type="number"
-										bind:value={levels[i].min_marks}
-									/>
-								</div>
-								<div>
-									<label class="label mt-4" for="levels[{i}].max_marks">Max marks</label>
-									<input
-										class="input"
-										id="levels[{i}].max_marks"
-										name="levels[{i}].max_marks"
-										type="number"
-										bind:value={levels[i].max_marks}
-									/>
+								<p class="font-semibold mt-4">Level {l}</p>
+								<div class="flex items-center mt-2 gap-4 sm:gap-8">
+									<div class="flex flex-col basis-1/2">
+										<label class="label" for="levels[{i}].name">Name</label>
+										<input
+											class="input"
+											id="levels[{i}].name"
+											name="levels[{i}].name"
+											type="text"
+											bind:value={levels[i].name}
+										/>
+									</div>
+									<div class="flex flex-col basis-1/4">
+										<label class="label" for="levels[{i}].min_marks"
+											>Min <span class="hidden sm:inline"> marks</span></label
+										>
+										<input
+											class="input"
+											id="levels[{i}].min_marks"
+											name="levels[{i}].min_marks"
+											type="number"
+											bind:value={levels[i].min_marks}
+										/>
+									</div>
+									<div class="flex flex-col basis-1/4">
+										<label class="label" for="levels[{i}].max_marks"
+											>Max <span class="hidden sm:inline"> marks</span></label
+										>
+										<input
+											class="input"
+											id="levels[{i}].max_marks"
+											name="levels[{i}].max_marks"
+											type="number"
+											bind:value={levels[i].max_marks}
+										/>
+									</div>
 								</div>
 							{/each}
 							<div>
@@ -403,62 +427,68 @@
 							</div>
 						</fieldset>
 					</div>
-					<div class="grow px-4 pt-4">
-						<fieldset class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4">
+					<div class="grow px-4 pt-4 md:pt-16 lg:pt-[58px]">
+						<fieldset
+							class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4"
+						>
 							<legend class="font-semibold">Areas</legend>
-							<div class="mt-4">
-								Number of areas: <span class="font-bold">{areas.length}</span>
+							<div class="flex items-center">
+								Number of areas: <span class="font-bold text-lg pl-2">{areas.length}</span>
 								&nbsp;&nbsp;&nbsp;
 								{#if areas.length < 7}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={addArea}>Add</button
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
+										on:click|preventDefault={addArea}><Plus /></button
 									>
 								{:else}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
 										on:click|preventDefault={addArea}
-										disabled>Add</button
+										disabled><Plus /></button
 									>
 								{/if}
 								{#if areas.length > 1}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
-										on:click|preventDefault={removeArea}>Remove</button
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
+										on:click|preventDefault={removeArea}><Minus /></button
 									>
 								{:else}
 									<button
-										class="btn btn-sm variant-ghost-secondary"
+										class="btn-icon btn-sm variant-ghost-secondary mx-2"
 										on:click|preventDefault={removeArea}
-										disabled>Remove</button
+										disabled><Minus /></button
 									>
 								{/if}
 							</div>
 							{#each range(1, areas.length) as a, i}
-								<div>
-									<label class="label mt-4" for="areas[{i}].name">Area {a}</label>
-									<input
-										class="input"
-										id="areas[{i}].name"
-										name="areas[{i}].name"
-										type="text"
-										bind:value={areas[i].name}
-									/>
-								</div>
-								<div>
-									<label class="label mt-4" for="areas[{i}].min_marks">Marks allowed</label>
-									<input
-										class="input"
-										id="areas[{i}].marks"
-										name="areas[{i}].marks"
-										type="number"
-										bind:value={areas[i].marks}
-									/>
+								<p class="font-semibold mt-4">Area {a}</p>
+								<div class="flex items-center mt-2 gap-4 sm:gap-8">
+									<div class="flex flex-col basis-3/4">
+										<label class="label" for="areas[{i}].name">Name</label>
+										<input
+											class="input"
+											id="areas[{i}].name"
+											name="areas[{i}].name"
+											type="text"
+											bind:value={areas[i].name}
+										/>
+									</div>
+									<div>
+										<label class="label" for="areas[{i}].marks">Marks allowed</label>
+										<input
+											class="input"
+											id="areas[{i}].marks"
+											name="areas[{i}].marks"
+											type="number"
+											bind:value={areas[i].marks}
+										/>
+									</div>
 								</div>
 								{#each range(1, levels.length) as l, j}
 									<div>
 										<label class="label mt-4" for="areas[{i}].descriptors[{j}]"
-											>Descriptors for Level {l}</label
+											>Descriptors for {#if levels[j].name}<strong>{levels[j].name}</strong> (Level {l}){:else}Level
+												{l}{/if}</label
 										>
 										<input
 											class="input"
@@ -472,17 +502,6 @@
 							{/each}
 						</fieldset>
 					</div>
-				</div>
-
-				<!-- Submit -->
-				<div>
-					<input
-						id="submit"
-						type="submit"
-						class="btn btn-md variant-ghost-primary font-bold fixed top-8 md:top-12 mt-12 right-0 md:right-4 mr-4 text-lg md:text-xl"
-						value={loading ? 'Loading...' : 'Save'}
-						disabled={loading}
-					/>
 				</div>
 			</form>
 		</div>
