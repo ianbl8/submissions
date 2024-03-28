@@ -141,7 +141,7 @@
 
 <PageTitle title="New assignment" />
 
-<main class="container h-full mx-auto relative">
+<main class="container h-full mx-auto relative pb-4">
 	<header class="pt-4 md:pt-6 pb-4 sticky top-0 z-10 bg-surface-50 dark:bg-surface-900">
 		<p class="px-4 pb-1">
 			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400"
@@ -151,23 +151,25 @@
 		<h1 class="h1 font-semibold px-4 py-1 bg-surface-50 dark:bg-surface-900">
 			New assignment
 			<!-- Submit -->
-			<button
-				id="submit"
-				type="submit"
-				form="form"
-				class="btn btn-md variant-ghost-primary font-bold float-right"
-				value={loading ? 'Saving...' : 'Save'}
-				disabled={loading}>{loading ? 'Saving...' : 'Save'}</button
-			>
+			<span class="grid justify-items-end pt-2 sm:pt-0 sm:float-right">
+				<button
+					id="submit"
+					type="submit"
+					form="form"
+					class="btn btn-sm font-semibold text-xl variant-ghost-primary float-right"
+					value={loading ? 'Saving...' : 'Save'}
+					disabled={loading}>{loading ? 'Saving...' : 'Save'}</button
+				>
+			</span>
 		</h1>
 	</header>
-	<section class="flex flex-col">
+	<section class="flex flex-col px-4">
 		<!-- New assignment form -->
 		<div class="form w-full mx-auto">
 			<form id="form" method="POST" use:enhance={handleSubmit} bind:this={newAssignmentForm}>
 				<!-- Details -->
 				<div class="flex flex-col md:flex-row">
-					<div class="grow md:basis-2/3 px-4">
+					<div class="grow md:basis-2/3 md:mr-4">
 						<label class="label mt-4" for="name">Assignment name (required)</label>
 						<input
 							class="input"
@@ -178,7 +180,7 @@
 							required
 						/>
 					</div>
-					<div class="grow md:basis-1/3 px-4">
+					<div class="grow md:basis-1/3 md:ml-4">
 						<label class="label mt-4" for="code">Assignment code (required)</label>
 						<input
 							class="input"
@@ -190,12 +192,12 @@
 						/>
 					</div>
 				</div>
-				<div class="px-4">
+				<div>
 					<label class="label mt-4" for="description">Description (required)</label>
 					<div id="description" class="rounded-b-lg" />
 					<!-- Quill input -->
 				</div>
-				<div class="px-4">
+				<div>
 					<label class="label mt-4" for="link"
 						>Link to assignment on course website (required)</label
 					>
@@ -209,7 +211,7 @@
 					/>
 				</div>
 				<div class="flex flex-col md:flex-row">
-					<div class="grow md:basis-1/3 px-4">
+					<div class="grow md:basis-1/3 md:mr-4">
 						<label class="label mt-4" for="release_at">Assignment release date/time</label>
 						<input
 							class="input"
@@ -220,7 +222,7 @@
 							required
 						/>
 					</div>
-					<div class="grow md:basis-1/3 px-4">
+					<div class="grow md:basis-1/3 md:mr-4 md:ml-4">
 						<label class="label mt-4" for="due_at">Submissions due by date/time</label>
 						<input
 							class="input"
@@ -231,7 +233,7 @@
 							required
 						/>
 					</div>
-					<div class="grow md:basis-1/3 px-4">
+					<div class="grow md:basis-1/3 md:ml-4">
 						<label class="label mt-4" for="late_at">Open for late submissions until</label>
 						<input
 							class="input"
@@ -244,7 +246,7 @@
 					</div>
 				</div>
 				<!-- Requirements -->
-				<div class="pt-4 px-4">
+				<div class="pt-4">
 					<fieldset
 						class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4"
 					>
@@ -326,11 +328,11 @@
 					</fieldset>
 				</div>
 				<!-- Rubric -->
-				<div class="mt-4 pt-4 px-4">
+				<div class="mt-4 pt-4">
 					<h3 class="h3 font-semibold">Rubric</h3>
 				</div>
 				<div class="flex flex-col md:flex-row">
-					<div class="basis-1/2 px-4">
+					<div class="basis-1/2 md:mr-4">
 						<div class="flex items-center pb-4">
 							<label class="label basis-2/3" for="total_marks"
 								>Total marks available <span class="hidden sm:inline">(e.g. 100 marks)</span></label
@@ -427,7 +429,7 @@
 							</div>
 						</fieldset>
 					</div>
-					<div class="grow px-4 pt-4 md:pt-16 lg:pt-[58px]">
+					<div class="grow md:ml-4 pt-4 md:pt-16 lg:pt-[58px]">
 						<fieldset
 							class="border border-solid border-surface-400 dark:border-surface-500 rounded-lg px-4 py-4"
 						>
