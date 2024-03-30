@@ -9,76 +9,89 @@
 	import RowsPerPage from '$lib/components/datatables/RowsPerPage.svelte';
 	import Pagination from '$lib/components/datatables/Pagination.svelte';
 	import Page from '../../+page.svelte';
-        
+
 	export let data: PageData;
 
 	let { session, supabase, users, loggedInUser } = data;
 	$: ({ session, supabase, users, loggedInUser } = data);
 
-	const handler = new DataHandler( users, { rowsPerPage: 10 });
+	const handler = new DataHandler(users, { rowsPerPage: 10 });
 	const rows = handler.getRows();
-	
 </script>
 
 <PageTitle title="User Admin" />
 
-<div class="container h-full mx-auto">
-	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-semibold">User Admin</h1>
-	</div>
-
-	<!-- Page content -->
-	<div class="flex flex-col">
-
+<main class="container h-full mx-auto relative pb-4">
+	<header class="pt-4 md:pt-6 pb-4 sticky top-0 z-10 bg-surface-50 dark:bg-surface-900">
+		<p class="px-4 pb-1">
+			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400">User</span
+			>
+		</p>
+		<h1 class="h1 font-semibold px-4 py-1 bg-surface-50 dark:bg-surface-900">Admin</h1>
+	</header>
+	<section class="flex flex-col px-4">
 		<!-- User admin datatable -->
-		<div class="py-3">
-			<h3 class="h3 py-1">Users</h3>
-			<header class="flex justify-between gap-4">
+		<div class="w-full mx-auto">
+			<header class="flex justify-between gap-4 py-2">
 				<Search {handler} />
 				<RowsPerPage {handler} />
 			</header>
-			<table class="table table-hover table-compact table-auto w-full">
-				<thead>
-					<tr>
-						<ThSort {handler} orderBy="forename">Forename</ThSort>
-						<ThSort {handler} orderBy="surname">Surname</ThSort>
-						<th>Email</th>
-						<th>Role</th>
-						<ThSort {handler} orderBy="student_id">Student ID</ThSort>
-						<th>Status</th>
-						<th colspan="2">User details</th>
-					</tr>
-					<tr>
-						<ThFilter {handler} filterBy="forename" />
-						<ThFilter {handler} filterBy="surname" />
-						<ThFilter {handler} filterBy="email" />
-						<ThFilter {handler} filterBy="role" />
-						<ThFilter {handler} filterBy="student_id" />
-						<ThFilter {handler} filterBy="status" />
-						<th colspan="2"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each $rows as row}
+			<div class="table-container rounded-lg border border-surface-400 dark:border-surface-500">
+				<table class="table table-hover ">
+					<thead>
 						<tr>
-							<td>{row.forename}</td>
-							<td>{row.surname}</td>
-							<td>{row.email}</td>
-							<td>{row.role}</td>
-							<td>{#if row.student_id}{row.student_id}{:else}—{/if}</td>
-							<td>{row.status}</td>
-							<td><a class="btn btn-sm variant-ghost-tertiary" href="../user/{row.number}">View</a></td>
-							<td><a class="btn btn-sm variant-ghost-secondary" href="../user/{row.number}/edit">Edit</a></td>
+							<th></th>
+							<ThSort {handler} orderBy="forename">Forename</ThSort>
+							<ThSort {handler} orderBy="surname">Surname</ThSort>
+							<th>Email</th>
+							<th>Role</th>
+							<ThSort {handler} orderBy="student_id">Student ID</ThSort>
+							<th>Status</th>
+							<th></th>
 						</tr>
-					{/each}
-				</tbody>
-			</table>
-			<footer class="flex justify-between">
+						<tr>
+							<th></th>
+							<ThFilter {handler} filterBy="forename" />
+							<ThFilter {handler} filterBy="surname" />
+							<ThFilter {handler} filterBy="email" />
+							<ThFilter {handler} filterBy="role" />
+							<ThFilter {handler} filterBy="student_id" />
+							<ThFilter {handler} filterBy="status" />
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each $rows as row}
+							<tr>
+								<td></td>
+								<td class="cursor-pointer" onclick="window.location='../user/{row.number}'">{row.forename}</td>
+								<td class="cursor-pointer" onclick="window.location='../user/{row.number}'">{row.surname}</td>
+								<td class="cursor-pointer" onclick="window.location='../user/{row.number}'">{row.email}</td>
+								<td class="cursor-pointer" onclick="window.location='../user/{row.number}'">{row.role}</td>
+								<td class="cursor-pointer" onclick="window.location='../user/{row.number}'"
+									>{#if row.student_id}{row.student_id}{:else}—{/if}</td
+								>
+								<td class="cursor-pointer" onclick="window.location='../user/{row.number}'">{row.status}</td>
+								<td></td>
+							</tr>
+						{/each}
+					</tbody>
+					<tfoot>
+						<tr>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<footer class="flex justify-between py-2">
 				<RowCount {handler} />
 				<Pagination {handler} />
 			</footer>
 		</div>
-
-	</div>
-
-</div>
+	</section>
+</main>

@@ -7,7 +7,7 @@
 
 <th>
 	<input
-		class="input text-sm w-full"
+		class="input font-normal w-full bg-surface-100 dark:bg-surface-800 min-w-24"
 		type="text"
 		placeholder="Filter"
 		bind:value
