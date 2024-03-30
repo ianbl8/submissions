@@ -12,7 +12,7 @@ export const load = async ({ params, locals: { supabase, getSession } }) => {
   // get course from database
   const { data: course } = await supabase
     .from('courses')
-    .select('id, number, name, code, description, start_date, end_date')
+    .select('id, number, name, code, description, link, start_date, end_date')
     .eq('number', params.cid)
     .single()
 
@@ -47,28 +47,34 @@ export const actions = {
     const name = formData.get('name') as string;
     const code = formData.get('code') as string;
     const description = formData.get('description') as string;
+    const link = formData.get('link') as string;
     const start_date = formData.get('start_date') as string;
     const end_date = formData.get('end_date') as string;
 
     // update data in courses table
-    const { error } = await supabase
+    const { data: course, error } = await supabase
       .from('courses')
       .update({
         name,
         code,
         description,
+        link,
         start_date,
         end_date,
         updated_at: new Date(),
       })
       .eq('id', id)
+      .select()
+      .single()
 
     if (error) {
       return fail(500, {
-        name, code, description, start_date, end_date,
+        name, code, description, link, start_date, end_date,
       })
     }
 
-    return { name, code, description, start_date, end_date, }
+    // redirect to course page
+    const course_url: string = "/course/" + course.number;
+    return redirect(303, course_url);
   }
 } satisfies Actions;

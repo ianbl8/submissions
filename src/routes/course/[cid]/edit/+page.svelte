@@ -16,52 +16,61 @@
 	let editCourseForm: HTMLFormElement;
 	let loading = false;
 	let id: string = course.id;
-	let name = course.name;
-	let code = course.code;
-	let description = course.description;
-	let start_date = course.start_date;
-	let end_date = course.end_date;
+	let { name, code, description, link, start_date, end_date } = course;
 
 	// set up Quill input
 	onMount(async () => {
 		const { default: Quill } = await import('quill');
-		let descriptionInput: HTMLElement = document.getElementById("description")!;
+		let descriptionInput: HTMLElement = document.getElementById('description')!;
 		let quill = new Quill(descriptionInput, {
 			modules: {
 				toolbar: [
 					['bold', 'italic'],
 					['link', 'blockquote', 'code-block'],
-					[{ list: 'ordered' }, { list: 'bullet' }],
-				],
+					[{ list: 'ordered' }, { list: 'bullet' }]
+				]
 			},
-			theme: 'snow',
+			theme: 'snow'
 		});
 
 		if (course.description) {
 			quill.clipboard.dangerouslyPasteHTML(course.description, 'user');
 		}
 
-		 // update description using Quill input
-		editCourseForm = document.querySelector('form')!
+		// update description using Quill input
+		editCourseForm = document.querySelector('form')!;
 		editCourseForm.addEventListener('formdata', (event: FormDataEvent) => {
 			let html = quill.getSemanticHTML(0);
 			description = sanitizeHtml(html, {
-				allowedTags: [ 'p', 'br', 'strong', 'em', 'b', 'i', 'a', 'blockquote', 'pre', 'ol', 'ul', 'li' ],
-			})
+				allowedTags: [
+					'p',
+					'br',
+					'strong',
+					'em',
+					'b',
+					'i',
+					'a',
+					'blockquote',
+					'pre',
+					'ol',
+					'ul',
+					'li'
+				]
+			});
 			event.formData.set('description', description);
 		});
 	});
 
 	const handleSubmit: SubmitFunction = () => {
 		loading = true;
-		return async ({result}) => {
+		return async ({ result }) => {
 			loading = false;
 
 			// redirect to course page
 			if (result.type === 'redirect') {
 				goto(result.location);
 			}
-		}
+		};
 	};
 </script>
 
@@ -69,52 +78,101 @@
 	<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.3/dist/quill.snow.css" rel="stylesheet" />
 </svelte:head>
 
-<PageTitle title="Edit: {course.name} ({course.code})" />
+<PageTitle title="Edit: {name} ({code})" />
 
-<div class="container h-full mx-auto">
-	<!-- Page name and route -->
-	<div class="pt-8 pb-4">
-		<h1 class="text-4xl font-semibold">Edit course: {course.name} ({course.code})</h1>
-		<h3 class="h3 py-1 mt-4">Please update the course details</h3>
-	</div>
-
+<main class="container h-full mx-auto relative pb-4">
+	<header class="pt-4 md:pt-6 pb-4 sticky top-0 z-10 bg-surface-50 dark:bg-surface-900">
+		<p class="px-4 pb-1">
+			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400"
+				>Course
+			</span><span class="text-2xl md:text-3xl">&nbsp;{code} </span>
+		</p>
+		<h1 class="h1 font-semibold px-4 py-1 bg-surface-50 dark:bg-surface-900">
+			Edit: {name}
+			<!-- Submit -->
+			<span class="grid justify-items-end pt-2 sm:pt-0 sm:float-right">
+				<button
+					id="submit"
+					type="submit"
+					form="form"
+					class="btn btn-sm font-semibold text-xl variant-ghost-primary float-right"
+					value={loading ? 'Saving...' : 'Save'}
+					disabled={loading}>{loading ? 'Saving...' : 'Save'}</button
+				>
+			</span>
+		</h1>
+	</header>
 	<!-- Page content -->
-	<div class="flex flex-col">
-
+	<section class="flex flex-col px-4">
 		<!-- Course details form -->
-		<div class="form">
-			<form method="POST" use:enhance={handleSubmit} bind:this={editCourseForm}>
+		<div class="form w-full mx-auto">
+			<form id="form" method="POST" use:enhance={handleSubmit} bind:this={editCourseForm}>
 				<input id="id" name="id" type="hidden" value={id} />
-				<div>
-					<label class="label mt-4" for="name">Course name</label>
-					<input class="input" id="name" name="name" type="text" value={form?.name ?? name} required />
-				</div>
-				<div>
-					<label class="label mt-4" for="code">Course code</label>
-					<input class="input" id="code" name="code" type="text" value={form?.code ?? code} required/>
+				<div class="flex flex-col md:flex-row">
+					<div class="grow md:basis-2/3 md:mr-4">
+						<label class="label mt-4" for="name">Course name</label>
+						<input
+							class="input"
+							id="name"
+							name="name"
+							type="text"
+							value={form?.name ?? name}
+							required
+						/>
+					</div>
+					<div class="grow md:basis-1/3 md:ml-4">
+						<label class="label mt-4" for="code">Course code</label>
+						<input
+							class="input"
+							id="code"
+							name="code"
+							type="text"
+							value={form?.code ?? code}
+							required
+						/>
+					</div>
 				</div>
 				<div>
 					<label class="label mt-4" for="description">Description</label>
-					<div id="description" /><!-- Quill input -->
+					<div id="description" />
+					<!-- Quill input -->
 				</div>
 				<div>
-					<label class="label mt-4" for="start_date">Start date</label>
-					<input class="input" id="start_date" name="start_date" type="date" value={form?.start_date ?? start_date} required />
-				</div>
-				<div>
-					<label class="label mt-4" for="end_date">End date</label>
-					<input class="input" id="end_date" name="end_date" type="date" value={form?.end_date ?? end_date} required />
-				</div>
-				<div>
+					<label class="label mt-4" for="link">Link to course website</label>
 					<input
-						type="submit"
-						class="btn btn-md variant-ghost-primary mt-4"
-						value={loading ? 'Loading...' : 'Save'}
-						disabled={loading}
+						class="input"
+						id="link"
+						name="link"
+						type="text"
+						value={form?.link ?? link}
+						required
 					/>
+				</div>
+				<div class="flex flex-col md:flex-row">
+					<div class="grow md:basis-1/2 md:mr-4">
+						<label class="label mt-4" for="start_date">Start date</label>
+						<input
+							class="input"
+							id="start_date"
+							name="start_date"
+							type="date"
+							value={form?.start_date ?? start_date}
+							required
+						/>
+					</div>
+					<div class="grow md:basis-1/2 md:ml-4">
+						<label class="label mt-4" for="end_date">End date</label>
+						<input
+							class="input"
+							id="end_date"
+							name="end_date"
+							type="date"
+							value={form?.end_date ?? end_date}
+							required
+						/>
+					</div>
 				</div>
 			</form>
 		</div>
-	</div>
-
-</div>
+	</section>
+</main>

@@ -28,6 +28,7 @@ export const actions = {
     const name = formData.get('name');
     const code = formData.get('code');
     const description = formData.get('description');
+    const link = formData.get('link');
     const start_date = formData.get('start_date');
     const end_date = formData.get('end_date');
 
@@ -36,6 +37,7 @@ export const actions = {
       name,
       code,
       description,
+      link,
       start_date,
       end_date,
       created_at: new Date(),
@@ -44,7 +46,7 @@ export const actions = {
 
     if (error) {
       return fail(500, {
-        name, code, description, start_date, end_date,
+        name, code, description, link, start_date, end_date,
       })
     }
     
