@@ -12,7 +12,7 @@ export const load = async ({ params, locals: { supabase, getSession } }) => {
   // get module from database
   const { data: module } = await supabase
     .from('modules')
-    .select('id, number, name, code, description, start_date, end_date')
+    .select('id, number, name, code, description, link, start_date, end_date')
     .eq('number', params.mid)
     .single()
 
@@ -47,6 +47,7 @@ export const actions = {
     const name = formData.get('name') as string;
     const code = formData.get('code') as string;
     const description = formData.get('description') as string;
+    const link = formData.get('link') as string;
     const start_date = formData.get('start_date') as string;
     const end_date = formData.get('end_date') as string;
 
@@ -57,6 +58,7 @@ export const actions = {
         name,
         code,
         description,
+        link,
         start_date,
         end_date,
         updated_at: new Date(),
@@ -67,7 +69,7 @@ export const actions = {
 
     if (error) {
       return fail(500, {
-        name, code, description, start_date, end_date,
+        name, code, description, link, start_date, end_date,
       })
     }
 
