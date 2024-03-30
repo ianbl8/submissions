@@ -10,13 +10,13 @@ export const load = async ({ locals: { supabase, getSession } }) => {
   }
 
   // get user from database
-  const { data: user } = await supabase
+  const { data: loggedInUser } = await supabase
     .from('users')
     .select('id, number, forename, surname, email, role, status, student_id')
     .eq('id', session.user.id)
     .single()
 
-  return { session, user }
+  return { session, loggedInUser }
 }
 
 export const actions = {
@@ -28,15 +28,22 @@ export const actions = {
     const forename = formData.get('forename');
     const surname = formData.get('surname');
     const email = formData.get('email');
-    const role = formData.get('role');
-    const status = formData.get('status');
+    let role = formData.get('role');
+    let status = formData.get('status');
     let student_id = formData.get('student_id');
     if (role != 'Student') {
       student_id = null;
     }
 
+    // if no existing users, make the first user's role 'Admin' and status 'Active' by default
+    const { count } = await supabase.from('users').select('*', { count: 'exact', head: true });
+    if (!count) {
+      role = 'Admin';
+      status = 'Active';
+    }
+
     // upsert data to users table
-    const { error } = await supabase.from('users').upsert({
+    const { data: user, error } = await supabase.from('users').upsert({
       id: session?.user.id,
       forename,
       surname,
@@ -46,7 +53,7 @@ export const actions = {
       student_id,
       created_at: new Date(),
       updated_at: new Date(),
-    })
+    }).select().single()
 
     if (error) {
       return fail(500, {
@@ -54,6 +61,9 @@ export const actions = {
       })
     }
 
-    return { forename, surname, email, role, status, student_id, }
+    // redirect to user page
+    const user_url: string = "/user/" + user.number;
+    return redirect(303, user_url);
+
   }
 } satisfies Actions;
