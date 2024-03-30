@@ -51,7 +51,7 @@
 			<div class="flex flex-col">
 				<div class="grow">
 					<h3 class="h3 font-semibold pb-1">Description</h3>
-					<p class="pb-4 text-lg">{@html description}</p>
+					<p id="description" class="pb-4 text-lg">{@html description}</p>
 					</div>
 				<!-- Details -->
 				<h3 class="h3 font-semibold pb-1">Details</h3>
