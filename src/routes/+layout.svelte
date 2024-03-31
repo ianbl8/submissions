@@ -66,20 +66,22 @@
 				</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<LightSwitch />
+				<div id="lightswitch">
+					<LightSwitch />
+				</div>
 				<!-- Sign out button, if logged in -->
 				{#if session}
-					<button class="btn btn-sm variant-ghost-error" on:click={handleSignOut}>
+					<button class="btn btn-sm variant-ghost-secondary" on:click={handleSignOut}>
 						Sign out
 					</button>
 				{:else}
-					<!-- GitHub repo link - to be replaced -->
+					<!-- Link to info page -->
 					<a
 						class="btn btn-sm variant-ghost-tertiary"
-						href="https://github.com/ianbl8/submissions"
+						href="https://ianbl8.github.io/submissions"
 						target="_blank"
 					>
-						GitHub repo
+						About
 					</a>
 				{/if}
 			</svelte:fragment>
