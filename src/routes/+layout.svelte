@@ -66,7 +66,9 @@
 				</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<LightSwitch />
+				<div id="lightswitch">
+					<LightSwitch />
+				</div>
 				<!-- Sign out button, if logged in -->
 				{#if session}
 					<button class="btn btn-sm variant-ghost-error" on:click={handleSignOut}>
