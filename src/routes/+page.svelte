@@ -3,6 +3,16 @@
 	import { ThemeSupa } from '@supabase/auth-ui-shared';
 
 	export let data;
+
+	let { supabase } = data;
+	$: ({ supabase } = data);
+
+	// redirect to dashboard when signed in with email
+	supabase.auth.onAuthStateChange((event, session) => {
+		if (event === 'SIGNED_IN') {
+			window.location.href = '/dashboard';
+		}
+	});
 </script>
 
 <div class="container h-full mx-auto">
