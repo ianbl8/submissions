@@ -14,6 +14,8 @@
 	let addModuleForm: HTMLFormElement;
 	let loading = false;
 
+	let authorisedUser: boolean = loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Tutor';
+
 	let start_date = new Date(course.start_date as string).toLocaleDateString('en-IE', {
 		year: 'numeric',
 		month: 'long',
@@ -107,7 +109,6 @@
 			</div>
 		</div>
 	</section>
-
 	<!-- Modules -->
 	<section class="flex flex-col pt-4 px-4">
 		<h3 class="h3 font-semibold pb-1">Modules</h3>
@@ -118,7 +119,13 @@
 			>
 		</p>
 		<div class="table-container pt-2">
-			<form id="form" method="POST" use:enhance={handleSubmit} bind:this={addModuleForm} action="?/addModule"></form>
+			<form
+				id="form"
+				method="POST"
+				use:enhance={handleSubmit}
+				bind:this={addModuleForm}
+				action="?/addModule"
+			></form>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -146,26 +153,83 @@
 							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'"
 								>{modules_info[i].module_credits}</td
 							>
-							<td><button form="form" formaction="?/removeModule" id="submit" type="submit" name="module_id" value={modules[i].id} class="btn btn-sm font-semibold variant-ghost-secondary"><Minus /></button></td>
+							<td>
+								{#if authorisedUser}
+									<button
+										form="form"
+										formaction="?/removeModule"
+										id="submit"
+										type="submit"
+										name="module_id"
+										value={modules[i].id}
+										class="btn btn-sm font-semibold variant-ghost-secondary"><Minus /></button
+									>
+								{/if}
+							</td>
 						</tr>
 					{/each}
 				</tbody>
 				<tfoot>
 					<tr>
-						<td></td>
-						<td colspan="2">
-							<input form="form" id="course_id" name="course_id" type="hidden" value={course.id} />
-							<input form="form" id="course_number" name="course_number" type="hidden" value={course.number} />
-							<select form="form" class="select" id="module_id" name="module_id" bind:value={selected_module}>
-								<option value="" disabled selected hidden>Add a module</option>
-								{#each other_modules as o}
-								  <option value={o.id}>{o.name} ({o.code})</option>
-								{/each}
-							</select>
-						</td>
-						<td><input form="form" class="input" id="module_level" name="module_level" placeholder="Level" /></td>
-						<td><input form="form" class="input" id="module_level" name="module_credits" placeholder="Credits" /></td>
-						<td><button form="form" id="submit" type="submit" class="btn btn-sm font-semibold variant-ghost-primary"><Plus /></button></td>
+						{#if authorisedUser}
+							<td></td>
+							<td colspan="2">
+								<input
+									form="form"
+									id="course_id"
+									name="course_id"
+									type="hidden"
+									value={course.id}
+								/>
+								<input
+									form="form"
+									id="course_number"
+									name="course_number"
+									type="hidden"
+									value={course.number}
+								/>
+								<select
+									form="form"
+									class="select"
+									id="module_id"
+									name="module_id"
+									bind:value={selected_module}
+								>
+									<option value="" disabled selected hidden>Add a module</option>
+									{#each other_modules as o}
+										<option value={o.id}>{o.name} ({o.code})</option>
+									{/each}
+								</select>
+							</td>
+							<td
+								><input
+									form="form"
+									class="input"
+									id="module_level"
+									name="module_level"
+									placeholder="Level"
+								/></td
+							>
+							<td
+								><input
+									form="form"
+									class="input"
+									id="module_level"
+									name="module_credits"
+									placeholder="Credits"
+								/></td
+							>
+							<td
+								><button
+									form="form"
+									id="submit"
+									type="submit"
+									class="btn btn-sm font-semibold variant-ghost-primary"><Plus /></button
+								></td
+							>
+						{:else}
+							<td colspan="6"></td>
+						{/if}
 					</tr>
 				</tfoot>
 			</table>
