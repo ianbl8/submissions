@@ -89,7 +89,7 @@
 				<div class="grow">
 					<h3 class="h3 font-semibold pb-1">Description</h3>
 					<p class="pb-4 text-lg">{@html description}</p>
-					</div>
+				</div>
 				<!-- Details -->
 				<h3 class="h3 font-semibold pb-1">Details</h3>
 			</div>
@@ -105,19 +105,19 @@
 				<div class="basis-1/2">
 					<h4 class="h4">Link to assignment on course website</h4>
 					<p class="pb-4"><a class="anchor" href={link} target="_blank">{link}</a></p>
-					{#if rubric.show_levels_marks}
+					{#if rubric}
 						<h4 class="h4">Total marks</h4>
 						<p class="pb-4">{rubric.total_marks}</p>
+						<h4 class="h4">Requirements</h4>
+						<ul class="list-disc list-inside pb-4">
+							{#if rubric.require_self_assessment}<li>Complete the self-assessment grid</li>{/if}
+							{#if rubric.require_files}<li>Upload file(s)</li>{/if}
+							{#if rubric.require_repo}<li>Provide a link to your repo</li>{/if}
+							{#if rubric.require_url}<li>Provide a link to your website</li>{/if}
+							{#if rubric.require_audio}<li>Provide a link to your audio recording</li>{/if}
+							{#if rubric.require_video}<li>Provide a link to your video recording</li>{/if}
+						</ul>
 					{/if}
-					<h4 class="h4">Requirements</h4>
-					<ul class="list-disc list-inside pb-4">
-						{#if rubric.require_self_assessment}<li>Complete the self-assessment grid</li>{/if}
-						{#if rubric.require_files}<li>Upload file(s)</li>{/if}
-						{#if rubric.require_repo}<li>Provide a link to your repo</li>{/if}
-						{#if rubric.require_url}<li>Provide a link to your website</li>{/if}
-						{#if rubric.require_audio}<li>Provide a link to your audio recording</li>{/if}
-						{#if rubric.require_video}<li>Provide a link to your video recording</li>{/if}
-					</ul>
 				</div>
 			</div>
 		</div>
@@ -125,39 +125,50 @@
 	<!-- Rubric-->
 	<section class="flex flex-col pt-4 px-4">
 		<h3 class="h3 font-semibold pb-1">Rubric</h3>
-		<p class="block py-1 bg-surface-100 dark:bg-surface-800 md:hidden"><em><strong>Note:</strong> Best viewed in landscape format on a larger screen. On this device, you can scroll across the rubric.</em></p>
-		<div class="table-container pt-2">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th></th>
-						{#each range(1, rubric.areas.length) as a, i}
-							<th>{rubric.areas[i].name}</th>
-						{/each}
-					</tr>
-				</thead>
-				<tbody>
-					{#each range(1, rubric.levels.length) as l, j}
+		{#if rubric}
+			<p class="block py-1 bg-surface-100 dark:bg-surface-800 md:hidden">
+				<em
+					><strong>Note:</strong> Best viewed in landscape format on a larger screen. On this device,
+					you can scroll across the rubric.</em
+				>
+			</p>
+			<div class="table-container pt-2">
+				<table class="table table-hover">
+					<thead>
 						<tr>
-							<th>
-								{rubric.levels[j].name}
-								{#if rubric.show_levels_marks}
-									<p class="p font-normal">
-										{rubric.levels[j].min_marks}–{rubric.levels[j].max_marks}
-									</p>
-								{/if}
-							</th>
+							<th></th>
 							{#each range(1, rubric.areas.length) as a, i}
-								<td>
-									<!--<span class="text-lg">-->
-										{rubric.areas[i].descriptors[j]}
-									<!--</span>-->
-								</td>
+								<th>{rubric.areas[i].name}</th>
 							{/each}
 						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+					</thead>
+					<tbody>
+						{#each range(1, rubric.levels.length) as l, j}
+							<tr>
+								<th>
+									{rubric.levels[j].name}
+									{#if rubric.show_levels_marks}
+										<p class="p font-normal">
+											{rubric.levels[j].min_marks}–{rubric.levels[j].max_marks}
+										</p>
+									{/if}
+								</th>
+								{#each range(1, rubric.areas.length) as a, i}
+									<td>
+										<!--<span class="text-lg">-->
+										{rubric.areas[i].descriptors[j]}
+										<!--</span>-->
+									</td>
+								{/each}
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{:else}
+			<p class="block py-1 bg-surface-100 dark:bg-surface-800 md:text-lg">
+				<em><strong>Note:</strong> This rubric is not yet available.</em>
+			</p>
+		{/if}
 	</section>
 </main>
