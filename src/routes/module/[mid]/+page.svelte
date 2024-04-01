@@ -4,21 +4,35 @@
 
 	export let data: PageData;
 
-	let { session, supabase, module, loggedInUser } = data;
+	let { session, supabase, module, module_assignments, loggedInUser } = data;
 
 	let start_date = new Date(module.start_date as string).toLocaleDateString('en-IE', {
 		year: 'numeric',
 		month: 'long',
-		day: 'numeric',
+		day: 'numeric'
 	});
 	let end_date = new Date(module.end_date as string).toLocaleDateString('en-IE', {
 		year: 'numeric',
 		month: 'long',
-		day: 'numeric',
+		day: 'numeric'
 	});
 
 	const { name, code, number, description, link } = module;
 
+	// get details from assignment_modules - a one-item array containing objects
+	let assignments = module_assignments![0].assignments;
+	let assignments_info = module_assignments![0].modules_assignments;
+
+	// range helper
+	function range(from: number, to: number) {
+		const result = [];
+		let i = from;
+		while (i <= to) {
+			result.push(i);
+			i += 1;
+		}
+		return result;
+	}
 </script>
 
 <PageTitle title="Module: {name} ({code})" />
@@ -52,7 +66,7 @@
 				<div class="grow">
 					<h3 class="h3 font-semibold pb-1">Description</h3>
 					<p id="description" class="pb-4 text-lg">{@html description}</p>
-					</div>
+				</div>
 				<!-- Details -->
 				<h3 class="h3 font-semibold pb-1">Details</h3>
 			</div>
@@ -71,51 +85,59 @@
 		</div>
 	</section>
 
-		<!-- Section -->
-		<div class="py-3">
-			<h3 class="h3 py-1">Assignments</h3>
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T S R
-				</span>
-			</p>
-			<p class="py-1">List of assignments</p>
-			<p class="py-1">
-				Link to each assignment:
-				<a
-					href="/assignment/aid"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/assignment/[aid]
-				</a>
-			</p>
-			<!-- Sub section -->
-			<hr />
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: S
-				</span>
-			</p>
-			<p class="py-1">
-				Released grade for each assignment (when complete)
-			</p>
-			<!-- Sub section -->
-			<hr />
-			<p class="py-1">
-				<span class="font-mono text-stone-700 dark:text-stone-300 bg-stone-300 dark:bg-stone-700">
-					Roles: A T
-				</span>
-			</p>
-			<p class="py-1">
-				Link to create new assignment:
-				<a
-					href="/assignment/new"
-					class="font-mono text-tertiary-800 dark:text-tertiary-200 bg-tertiary-200 dark:bg-tertiary-800"
-				>
-					/assignment/new
-				</a>
-			</p>
+	<!-- Modules -->
+	<section class="flex flex-col pt-4 px-4">
+		<h3 class="h3 font-semibold pb-1">Assignments</h3>
+		<p class="block py-1 bg-surface-100 dark:bg-surface-800 md:hidden">
+			<em
+				><strong>Note:</strong> Best viewed in landscape format on a larger screen. On this device, you
+				can scroll across the module list.</em
+			>
+		</p>
+		<div class="table-container pt-2">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Code</th>
+						<th>Weighting</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each range(1, assignments.length) as m, i}
+						<tr>
+							<th>{m}</th>
+							<td
+								class="cursor-pointer"
+								onclick="window.location='../assignment/{assignments[i].number}'"
+								>{assignments[i].name}</td
+							>
+							<td
+								class="cursor-pointer"
+								onclick="window.location='../assignment/{assignments[i].number}'"
+								>{assignments[i].code}</td
+							>
+							<td
+								class="cursor-pointer"
+								onclick="window.location='../assignment/{assignments[i].number}'"
+								>{assignments_info[i].assignment_weighting}</td
+							>
+							<td></td>
+						</tr>
+					{/each}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tfoot>
+			</table>
 		</div>
-
-
+	</section>
 </main>
