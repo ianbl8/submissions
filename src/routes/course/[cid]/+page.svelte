@@ -1,10 +1,18 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 	import PageTitle from '$lib/components/PageTitle.svelte';
+	import Plus from '$lib/components/icons/Plus.svelte';
+	import Minus from '$lib/components/icons/Minus.svelte';
+	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
 	export let data: PageData;
 
-	let { session, supabase, course, course_modules, loggedInUser } = data;
+	let { session, supabase, course, course_modules, other_modules, loggedInUser } = data;
+	$: ({ session, supabase, course, course_modules, other_modules, loggedInUser } = data);
+
+	let addModuleForm: HTMLFormElement;
+	let loading = false;
 
 	let start_date = new Date(course.start_date as string).toLocaleDateString('en-IE', {
 		year: 'numeric',
@@ -23,6 +31,9 @@
 	let modules = course_modules![0].modules;
 	let modules_info = course_modules![0].courses_modules;
 
+	console.log(other_modules);
+	let selected_module: string;
+
 	// range helper
 	function range(from: number, to: number) {
 		const result = [];
@@ -33,6 +44,18 @@
 		}
 		return result;
 	}
+
+	const handleSubmit: SubmitFunction = () => {
+		loading = true;
+		return async ({ result }) => {
+			loading = false;
+
+			// redirect to course page
+			if (result.type === 'redirect') {
+				window.location = result.location;
+			}
+		};
+	};
 </script>
 
 <PageTitle title="Course: {name} ({code})" />
@@ -95,6 +118,7 @@
 			>
 		</p>
 		<div class="table-container pt-2">
+			<form id="form" method="POST" use:enhance={handleSubmit} bind:this={addModuleForm} action="?/addModule"></form>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -122,18 +146,26 @@
 							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'"
 								>{modules_info[i].module_credits}</td
 							>
-							<td></td>
+							<td><button form="form" formaction="?/removeModule" id="submit" type="submit" name="module_id" value={modules[i].id} class="btn btn-sm font-semibold variant-ghost-secondary"><Minus /></button></td>
 						</tr>
 					{/each}
 				</tbody>
 				<tfoot>
 					<tr>
 						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td colspan="2">
+							<input form="form" id="course_id" name="course_id" type="hidden" value={course.id} />
+							<input form="form" id="course_number" name="course_number" type="hidden" value={course.number} />
+							<select form="form" class="select" id="module_id" name="module_id" bind:value={selected_module}>
+								<option value="" disabled selected hidden>Add a module</option>
+								{#each other_modules as o}
+								  <option value={o.id}>{o.name} ({o.code})</option>
+								{/each}
+							</select>
+						</td>
+						<td><input form="form" class="input" id="module_level" name="module_level" placeholder="Level" /></td>
+						<td><input form="form" class="input" id="module_level" name="module_credits" placeholder="Credits" /></td>
+						<td><button form="form" id="submit" type="submit" class="btn btn-sm font-semibold variant-ghost-primary"><Plus /></button></td>
 					</tr>
 				</tfoot>
 			</table>
