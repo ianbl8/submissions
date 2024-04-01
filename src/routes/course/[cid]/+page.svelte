@@ -110,10 +110,18 @@
 					{#each range(1, modules.length) as m, i}
 						<tr>
 							<th>{m}</th>
-							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'">{modules[i].name}</td>
-							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'">{modules[i].code}</td>
-							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'">{modules_info[i].module_level}</td>
-							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'">{modules_info[i].module_credits}</td>
+							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'"
+								>{modules[i].name}</td
+							>
+							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'"
+								>{modules[i].code}</td
+							>
+							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'"
+								>{modules_info[i].module_level}</td
+							>
+							<td class="cursor-pointer" onclick="window.location='../module/{modules[i].number}'"
+								>{modules_info[i].module_credits}</td
+							>
 							<td></td>
 						</tr>
 					{/each}
@@ -128,8 +136,7 @@
 						<td></td>
 					</tr>
 				</tfoot>
-		</table>
+			</table>
 		</div>
 	</section>
-
 </main>
