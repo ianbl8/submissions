@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
+	import type { PageData } from './$types';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import Plus from '$lib/components/icons/Plus.svelte';
 	import Minus from '$lib/components/icons/Minus.svelte';
@@ -33,7 +33,6 @@
 	let modules = course_modules![0].modules;
 	let modules_info = course_modules![0].courses_modules;
 
-	console.log(other_modules);
 	let selected_module: string;
 
 	// range helper
@@ -74,7 +73,7 @@
 			<!-- Buttons -->
 			<span class="grid justify-items-end pt-2 sm:pt-0 sm:float-right">
 				<span>
-					{#if loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Tutor'}
+					{#if authorisedUser}
 						<a
 							class="btn btn-sm font-semibold text-xl variant-ghost-secondary float-right ml-2"
 							href="/course/{number}/edit"

@@ -68,7 +68,7 @@ export const actions = {
     const module_level = formData.get('module_level');
     const module_credits = formData.get('module_credits');
 
-    // update data in courses_modules table
+    // add entry in courses_modules table
     const { data: course, error } = await supabase
       .from('courses_modules')
       .upsert({
