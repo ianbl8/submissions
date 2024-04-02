@@ -11,12 +11,12 @@
 		courses[i].start = new Date(courses[i].start_date as string).toLocaleString('en-IE', {
 			year: 'numeric',
 			month: 'long',
-			day: 'numeric',
+			day: 'numeric'
 		});
 		courses[i].end = new Date(courses[i].end_date as string).toLocaleString('en-IE', {
 			year: 'numeric',
 			month: 'long',
-			day: 'numeric',
+			day: 'numeric'
 		});
 	}
 
@@ -47,15 +47,22 @@
 			<span class="grid justify-items-end pt-2 sm:pt-0 sm:float-right">
 				<span>
 					<a
-					class="btn btn-sm font-semibold text-xl variant-ghost-primary float-right ml-2"
-					href="/user/{loggedInUser?.number}"
-					>User details
-				</a>
+						class="btn btn-sm font-semibold text-xl variant-ghost-primary float-right ml-2"
+						href="/user/{loggedInUser?.number}"
+						>User details
+					</a>
 					{#if loggedInUser?.role == 'Admin'}
 						<a
 							class="btn btn-sm font-semibold text-xl variant-ghost-secondary float-right ml-2"
 							href="/user/admin"
 							>User Admin page
+						</a>
+					{/if}
+					{#if loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Tutor'}
+						<a
+							class="btn btn-sm font-semibold text-xl variant-ghost-tertiary float-right ml-2"
+							href="/course/new"
+							>New course
 						</a>
 					{/if}
 				</span>
