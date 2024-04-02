@@ -27,15 +27,35 @@ export const load = async ({ params, locals: { supabase, getSession } }) => {
     throw redirect(303, "/");
   }
 
-  // get submission from database if it exists
+  // get submission from database
   const { data: submission } = await supabase
     .from('submissions')
     .select()
-    .eq('assignment_id', assignment.id)
-    .eq('student_id', loggedInUser.id)
+    .eq('number', params.sid)
     .single()
 
-  return { session, assignment, submission, loggedInUser }
+  // redirect if not a valid submission  
+  if (!submission) {
+    const assignment_url: string = "/assignment/" + params.aid + "/grade";
+    throw redirect(303, assignment_url);
+  }
+
+  // get student
+  const { data: student } = await supabase
+    .from('users')
+    .select()
+    .eq('id', submission.student_id)
+    .single()
+
+  // get grade from database if it exists
+  const { data: grading } = await supabase
+    .from('grades')
+    .select()
+    .eq('submission_id', submission.id)
+    .eq('grader_id', loggedInUser.id)
+    .single()
+
+  return { session, assignment, submission, student, grading, loggedInUser }
 }
 
 export const actions = {
@@ -44,57 +64,51 @@ export const actions = {
 
     // get form data
     const formData = await request.formData();
-    const student_id = formData.get('student_id');
-    const assignment_id = formData.get('assignment_id');
-    const repo = formData.get('repo');
-    const url = formData.get('url');
-    const audio = formData.get('audio');
-    const video = formData.get('video');
-    const areas: { level: number, comment: string }[] = JSON.parse(formData.get('areas') as string);
+    const grader_id = formData.get('student_id');
+    const submission_id = formData.get('assignment_id');
+    const areas: { level: number, grade: number, comment: string }[] = JSON.parse(formData.get('areas') as string);
+    const feedback = formData.get('feedback');
+    const grade = formData.get('grade');
     const complete = (formData.get('complete') == 'on');
 
-    const { data: existingSubmission } = await supabase
-    .from('submissions')
+    const { data: existingGrading } = await supabase
+    .from('grades')
     .select()
-    .eq('assignment_id', assignment_id)
-    .eq('student_id', student_id)
+    .eq('submission_id', submission_id)
+    .eq('grader_id', grader_id)
     .single()
     
-    let submission;
+    let grading;
     let error;
 
-    if (existingSubmission) {
-      const { data: updateSubmission, updateError } = await supabase
-        .from('submissions')
+    if (existingGrading) {
+      const { data: updateGrading, error: updateError } = await supabase
+        .from('grades')
         .update({
           data: {
-            repo,
-            url,
-            audio,
-            video,
-            areas
+            areas,
+            feedback,
+            grade
           },
           complete,
           updated_at: new Date(),
           })
-        .eq('id', existingSubmission.id)
+        .eq('id', existingGrading.id)
         .select()
         .single()
 
-      submission = updateSubmission;
+      grading = updateGrading;
       error = updateError;
     } else {
-      const { data: newSubmission, newError } = await supabase
-      .from('submissions')
+      const { data: newGrading, error: newError } = await supabase
+      .from('grades')
       .upsert({
-        student_id,
-        assignment_id,
+        grader_id,
+        submission_id,
         data: {
-          repo,
-          url,
-          audio,
-          video,
-          areas
+          areas,
+          feedback,
+          grade
         },
         complete,
         created_at: new Date(),
@@ -103,16 +117,16 @@ export const actions = {
       .select()
       .single()
 
-      submission = newSubmission;
+      grading = newGrading;
       error = newError;
     }
 
     if (error) {
       return fail(500, {
-        repo, url, audio, video, areas, complete
+        areas, complete, feedback, grade
       })
     }
 
-    return submission;
+    return grading;
   }
 }

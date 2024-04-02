@@ -7,7 +7,7 @@ export type Submission = {
   comment: string;
 }
 
-export type Areas = {
+export type SubmissionAreas = {
   level: number;
   comment: string;
 }[];
