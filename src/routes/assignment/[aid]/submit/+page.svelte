@@ -3,7 +3,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData, ActionData } from './$types';
 	import type { Rubric } from '$lib/types/Rubric';
-	import type { Areas, Submission } from '$lib/types/Submission';
+	import type { Submission, SubmissionAreas } from '$lib/types/Submission';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -25,7 +25,7 @@
 	const { name, code, number } = assignment;
 	const rubric = assignment.rubric as Rubric;
 
-	let areas: Areas = submission?.data?.areas ?? [];
+	let areas: SubmissionAreas = submission?.data?.areas ?? [];
 	if (areas.length == 0) {
 		for (let i = 0; i < rubric.areas.length; i++) {
 			areas.push({ level: 0, comment: '' });

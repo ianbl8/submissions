@@ -1,4 +1,5 @@
 import { redirect } from "@sveltejs/kit";
+import type { Actions } from "./$types";
 
 export const load = async ({ params, locals: { supabase, getSession } }) => {
 
@@ -64,7 +65,7 @@ export const actions = {
     let error;
 
     if (existingSubmission) {
-      const { data: updateSubmission, updateError } = await supabase
+      const { data: updateSubmission, error: updateError } = await supabase
         .from('submissions')
         .update({
           data: {
@@ -84,7 +85,7 @@ export const actions = {
       submission = updateSubmission;
       error = updateError;
     } else {
-      const { data: newSubmission, newError } = await supabase
+      const { data: newSubmission, error: newError } = await supabase
       .from('submissions')
       .upsert({
         student_id,
@@ -113,6 +114,15 @@ export const actions = {
       })
     }
 
-    return submission;
+    const { data: assignment } = await supabase
+      .from('assignments')
+      .select()
+      .eq('id', assignment_id)
+      .single()
+
+    // redirect to assignment page
+    const assignment_url: string = "/assignment/" + assignment?.number;
+    return redirect(303, assignment_url);
+
   }
-}
+} satisfies Actions;
