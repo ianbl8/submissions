@@ -59,8 +59,10 @@ export const actions = {
     .eq('assignment_id', assignment_id)
     .eq('student_id', student_id)
     .single()
+    
     let submission;
     let error;
+
     if (existingSubmission) {
       const { data: updateSubmission, updateError } = await supabase
         .from('submissions')
@@ -78,6 +80,7 @@ export const actions = {
         .eq('id', existingSubmission.id)
         .select()
         .single()
+
       submission = updateSubmission;
       error = updateError;
     } else {
@@ -99,6 +102,7 @@ export const actions = {
       })
       .select()
       .single()
+
       submission = newSubmission;
       error = newError;
     }
@@ -109,7 +113,6 @@ export const actions = {
       })
     }
 
-    console.log(submission);
     return submission;
   }
 }
