@@ -1,4 +1,5 @@
 import { redirect } from "@sveltejs/kit";
+import type { Actions } from "./$types";
 
 export const load = async ({ params, locals: { supabase, getSession } }) => {
 
@@ -14,6 +15,9 @@ export const load = async ({ params, locals: { supabase, getSession } }) => {
     .select('id, number, forename, surname, email, role, status, student_id')
     .eq('id', session.user.id)
     .single()
+  if (loggedInUser?.role == 'Student') {
+    throw redirect(303, "/");
+  }
 
   // get assignment from database
   const { data: assignment } = await supabase
@@ -52,9 +56,8 @@ export const load = async ({ params, locals: { supabase, getSession } }) => {
     .from('grades')
     .select()
     .eq('submission_id', submission.id)
-    .eq('grader_id', loggedInUser.id)
     .single()
-
+  
   return { session, assignment, submission, student, grading, loggedInUser }
 }
 
@@ -64,11 +67,11 @@ export const actions = {
 
     // get form data
     const formData = await request.formData();
-    const grader_id = formData.get('student_id');
-    const submission_id = formData.get('assignment_id');
+    const grader_id = formData.get('grader_id');
+    const submission_id = formData.get('submission_id');
     const areas: { level: number, grade: number, comment: string }[] = JSON.parse(formData.get('areas') as string);
     const feedback = formData.get('feedback');
-    const grade = formData.get('grade');
+    const grade = Number(formData.get('grade'));
     const complete = (formData.get('complete') == 'on');
 
     const { data: existingGrading } = await supabase
@@ -127,6 +130,21 @@ export const actions = {
       })
     }
 
-    return grading;
+    const { data: submission } = await supabase
+    .from('submissions')
+    .select('assignment_id')
+    .eq('id', submission_id)
+    .single()
+
+    const { data: assignment } = await supabase
+    .from('assignments')
+    .select()
+    .eq('id', submission?.assignment_id)
+    .single()
+
+    // redirect to assignment grading page
+    const grading_url: string = "/assignment/" + assignment.number + "/grade";
+    return redirect(303, grading_url);
+
   }
-}
+} satisfies Actions;

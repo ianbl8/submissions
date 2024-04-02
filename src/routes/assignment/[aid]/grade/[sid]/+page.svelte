@@ -17,8 +17,8 @@
 
 	let gradingForm: HTMLFormElement;
 	let loading = false;
-
-	let feedback = grading?.data?.grading ?? '';
+	let grade = grading?.data?.grade ?? 0;
+	let feedback = grading?.data?.feedback ?? '';
 	let complete = grading?.complete ?? false;
 
 	let submission_repo = submission?.data?.repo ?? '';
@@ -64,6 +64,7 @@
 		gradingForm.addEventListener('formdata', (event: FormDataEvent) => {
 			event.formData.set('areas', JSON.stringify(grade_areas));
 			grade = grade_areas.reduce((sum, item) => sum + item.grade, 0);
+			event.formData.set('grade', grade);
 		});
 	});
 
@@ -80,7 +81,7 @@
 	};
 </script>
 
-<PageTitle title="Grade {student_id} {name} ({code})" />
+<PageTitle title="Grade {student_id}: {name} ({code})" />
 
 <main class="container h-full mx-auto relative pb-4">
 	<header class="pt-4 md:pt-6 pb-4 sticky top-0 z-10 bg-surface-50 dark:bg-surface-900">
@@ -107,7 +108,7 @@
 	</header>
 	<!-- Page content -->
 	<section class="flex flex-col px-4">
-		<!-- Submission form -->
+		<!-- Grading form -->
 		<div class="form w-full mx-auto">
 			<form id="form" method="POST" use:enhance={handleSubmit} bind:this={gradingForm}>
 				<input id="submission_id" name="submission_id" type="hidden" value={submission.id} />
@@ -217,17 +218,18 @@
 						<legend class="font-semibold text-xl">Final grade and feedback</legend>
 						<div class="flex flex-col md:flex-row">
 							<div class="grow md:basis-1/4 px-4">
-								<label class="label mt-4 font-bold px-24" for="grade">Grade</label>
-								<input class="input" id="grade" type="number" bind:value={grade} hidden />
-								<p class="text-4xl font-bold px-24 float-right">{grade}</p>
+									<label class="label mt-4 font-bold text-xl grow" for="grade">Grade</label>
+									<input class="input" id="grade" name="grade" type="number" value={grade} hidden />
+									<p class="text-4xl font-bold grow">{grade}</p>
 							</div>
 							<div class="grow md:basis-3/4 px-4">
 								<label class="label mt-4 font-semibold" for="feedback">Feedback</label>
 								<textarea
 									id="feedback"
+									name="feedback"
 									class="textarea"
 									rows={rubric.levels.length}
-									bind:value={feedback}
+									value={feedback}
 								></textarea>
 							</div>
 						</div>
