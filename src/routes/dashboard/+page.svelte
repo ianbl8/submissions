@@ -38,7 +38,7 @@
 	<header class="pt-4 md:pt-6 pb-4 sticky top-0 z-10 bg-surface-50 dark:bg-surface-900">
 		<p class="px-4 pb-1">
 			<span class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400"
-				>Submission
+				>Submissions
 			</span>
 		</p>
 		<h1 class="h1 font-semibold px-4 py-1 bg-surface-50 dark:bg-surface-900">
