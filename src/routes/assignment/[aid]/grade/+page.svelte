@@ -170,19 +170,19 @@
 							<th>{s}</th>
 							<td
 								class="cursor-pointer"
-								onclick="window.location='../assignment/{assignment.number}/grade/{assignment_submissions[
+								onclick="window.location='../../assignment/{assignment.number}/grade/{assignment_submissions[
 									i
 								].number}'">{assignment_submissions[i].student_id}</td
 							>
 							<td
 								class="cursor-pointer"
-								onclick="window.location='../assignment/{assignment.number}/grade/{assignment_submissions[
+								onclick="window.location='../../assignment/{assignment.number}/grade/{assignment_submissions[
 									i
 								].number}'">{assignment_submissions[i].complete ? 'Submitted' : 'Draft'}</td
 							>
 							<td
 								class="cursor-pointer"
-								onclick="window.location='../assignment/{assignment.number}/grade/{assignment_submissions[
+								onclick="window.location='../../assignment/{assignment.number}/grade/{assignment_submissions[
 									i
 								].number}'"
 								>{assignment_submissions[i].submitted_at}</td
