@@ -15,6 +15,11 @@ export const load = async ({ locals: { supabase, getSession } }) => {
     .eq('id', session.user.id)
     .single()
 
-  return { session, loggedInUser }
+  // get courses from database
+  const { data: courses } = await supabase
+    .from('courses')
+    .select()
+
+  return { session, courses, loggedInUser }
 
 }
