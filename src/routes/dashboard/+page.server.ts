@@ -15,6 +15,11 @@ export const load = async ({ locals: { supabase, getSession } }) => {
     .eq('id', session.user.id)
     .single()
 
+  // if no user, redirect to /user/new
+  if (!loggedInUser) {
+    throw redirect(303, "/user/new")
+  }
+  
   // get courses from database
   const { data: courses } = await supabase
     .from('courses')
