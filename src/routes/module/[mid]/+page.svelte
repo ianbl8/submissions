@@ -80,6 +80,13 @@
 							>Edit
 						</a>
 					{/if}
+					{#if loggedInUser?.role == 'Admin' || loggedInUser?.role == 'Tutor'}
+						<a
+							class="btn btn-sm font-semibold text-xl variant-ghost-tertiary float-right ml-2"
+							href="/assignment/new"
+							>New assignment
+						</a>
+					{/if}
 				</span>
 			</span>
 		</h1>
